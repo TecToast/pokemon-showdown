@@ -288,6 +288,10 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		name: "CAP",
 		speciesFilter: thing => thing.isNonstandard === 'CAP',
 	},
+	batzi: {
+		name: "Batzi",
+		speciesFilter: thing => thing.isNonstandard === 'Batzi',
+	},
 	custom: {
 		name: "Custom",
 		genericFilter: thing => thing.isNonstandard === 'Custom',

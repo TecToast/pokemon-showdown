@@ -1662,6 +1662,7 @@ export class Pokemon {
 	) {
 		if (!this.hp) return false;
 		status = this.battle.dex.conditions.get(status);
+		if (this.battle.format.mod === 'gen9batzi' && status.id === 'frz') return false;
 		if (this.battle.event) {
 			if (!source) source = this.battle.event.source;
 			if (!sourceEffect) sourceEffect = this.battle.effect;

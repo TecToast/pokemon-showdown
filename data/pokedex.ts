@@ -20959,4 +20959,19 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
+	centiskorchmega: {
+		num: 851,
+		name: "Centiskorch-Mega",
+		baseSpecies: "Centiskorch",
+		forme: "Mega",
+		types: ["Fire", "Bug"],
+		baseStats: {hp: 100, atk: 220, def: 85, spa: 120, spd: 85, spe: 95},
+		abilities: {0: "Flash Fire"},
+		weightkg: 120,
+		heightm: 3,
+		eggGroups: ["Bug"],
+		color: "Red",
+		requiredItem: "Centiskorchite",
+		isNonstandard: "Batzi"
+	},
 };

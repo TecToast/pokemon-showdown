@@ -8338,4 +8338,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 8,
 		isNonstandard: "CAP",
 	},
+	centiskorchite: {
+		name: "Centiskorchite",
+		spritenum: 586,
+		megaStone: "Centiskorch-Mega",
+		megaEvolves: "Centiskorch",
+		itemUser: ["Centiskorch"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1000,
+		gen: 6,
+		isNonstandard: "Batzi",
+	},
 };
