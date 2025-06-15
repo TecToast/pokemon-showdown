@@ -619,7 +619,11 @@ export class BattleActions {
 		for (const [i, target] of targets.entries()) {
 			if (target.volatiles['commanding']) {
 				hitResults[i] = false;
-			} else if (this.battle.gen >= 8 && move.id === 'toxic' && pokemon.hasType('Poison')) {
+			} else if (
+				(this.battle.gen >= 8 && move.id === 'toxic' && pokemon.hasType('Poison')) ||
+				(this.battle.format.mod === "gen9batzi" && move.id === 'thunderwave' && pokemon.hasType('Electric')) ||
+				(this.battle.format.mod === "gen9batzi" && move.id === 'willowisp' && pokemon.hasType('Fire'))
+			) {
 				hitResults[i] = true;
 			} else {
 				hitResults[i] = this.battle.runEvent('Invulnerability', target, pokemon, move);
@@ -722,10 +726,10 @@ export class BattleActions {
 					}
 				}
 			}
-			if (
-				move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||
-				(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())
-			) {
+			if (move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||
+				(this.battle.format.mod === "Batzi" && move.id === 'thunderwave' && pokemon.hasType('Electric')) ||
+				(this.battle.format.mod === "Batzi" && move.id === 'willowisp' && pokemon.hasType('Fire')) ||
+					(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())) {
 				accuracy = true; // bypasses ohko accuracy modifiers
 			} else {
 				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);

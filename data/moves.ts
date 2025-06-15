@@ -22144,4 +22144,41 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Fairy",
 		contestType: "Clever",
 	},
+	bananarang: {
+		num: 0,
+		accuracy: 100,
+		basePower: 95,
+		category: "Physical",
+		name: "Bananarang",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		self: {
+			volatileStatus: 'bananarang',
+		},
+		condition: {
+			onStart(pokemon) {
+				this.effectState.lastMove = '';
+				this.effectState.numConsecutive = 0;
+			},
+			onTryMovePriority: -2,
+			onTryMove(pokemon, target, move) {
+				if (move.callsMove) return;
+				if (move.id === 'bananarang' && pokemon.moveLastTurnResult) {
+					this.effectState.numConsecutive++;
+				} else {
+					this.effectState.numConsecutive = 0;
+				}
+			},
+			onModifyDamage(damage, source, target, move) {
+				const dmgMod = [4096, 4915, 5734, 6553, 7372, 8192];
+				const numConsecutive = this.effectState.numConsecutive > 5 ? 5 : this.effectState.numConsecutive;
+				this.debug(`Current Bananarang boost: ${dmgMod[numConsecutive]}/4096`);
+				return this.chainModify([dmgMod[numConsecutive], 4096]);
+			},
+		},
+		target: "normal",
+		type: "Grass",
+		contestType: "Tough",
+	},
 };

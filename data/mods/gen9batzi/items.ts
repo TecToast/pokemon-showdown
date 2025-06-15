@@ -74,19 +74,88 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	eviolite: {
 		inherit: true,
 		onModifyDef(def, pokemon) {
-			const result = calcEviolite(this.dex, pokemon.species);
+			const result = pokemon.species.id === 'phione' ? 1 : calcEviolite(this.dex, pokemon.species);
 			if (result > 0) {
 				return this.chainModify(1 + 0.5 * result);
 			}
 		},
 		onModifySpD(spd, pokemon) {
-			const result = calcEviolite(this.dex, pokemon.species);
+			const result = pokemon.species.id === 'phione' ? 1 : calcEviolite(this.dex, pokemon.species);
 			if (result > 0) {
 				return this.chainModify(1 + 0.5 * result);
 			}
 		},
 	},
+	buggem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	darkgem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	dragongem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	electricgem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	fairygem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	fightinggem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	firegem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	flyinggem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	ghostgem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	grassgem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	groundgem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	icegem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	poisongem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	psychicgem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	rockgem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	steelgem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
+	watergem: {
+		inherit: true,
+		isNonstandard: "Batzi",
+	},
 };
+
 function calcEviolite(dex: ModdedDex, pokemon: SpeciesData): number {
 	if (!pokemon.evos) return 0;
 	const nextCandidates = pokemon.evos.map(mon => dex.species.get(mon));

@@ -5649,4 +5649,38 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 214,
 		isNonstandard: "Batzi",
 	},
+	sharknado: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bite']) {
+				return this.chainModify(1.5);
+			}
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) {
+				this.boost({spe: 1});
+			}
+		},
+		flags: {},
+		name: "Sharknado",
+		rating: 3.5,
+		num: 173,
+		isNonstandard: "Batzi",
+	},
+	volumeamplification: {
+		onBasePowerPriority: 7,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) {
+				this.debug('Volume amplification boost');
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		flags: {breakable: 1},
+		name: "Volume Amplification",
+		rating: 3.5,
+		num: 244,
+		isNonstandard: "Batzi",
+	},
 };
