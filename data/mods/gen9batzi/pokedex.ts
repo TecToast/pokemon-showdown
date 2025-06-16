@@ -841,5 +841,13 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: {0: "Sharknado"},
 	},
+	ironhands: {
+		inherit: true,
+		abilities: {0: "Iron Fist", 1: "Static"},
+	},
+	ironbundle: {
+		inherit: true,
+		abilities: {0: "Screen Cleaner"},
+	},
 };
 
