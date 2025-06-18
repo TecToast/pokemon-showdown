@@ -278,7 +278,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	grapploct: {
 		inherit: true,
 		types: ["Water", "Fighting"],
-		baseStats: {hp: 80, atk: 118, def: 90, spa: 70, spd: 80, spe: 20},
+		baseStats: {hp: 80, atk: 118, def: 90, spa: 70, spd: 80, spe: 62},
 	},
 	greattusk: {
 		inherit: true,
@@ -727,6 +727,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: {hp: 80, atk: 69, def: 95, spa: 69, spd: 95, spe: 36},
 		abilities: {0: "Anticipation", 1: "Adaptability", H: "Overcoat"},
 	},
+	wormadam: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 59, def: 85, spa: 79, spd: 105, spe: 36},
+		abilities: {0: "Anticipation", 1: "Grass Pelt", H: "Overcoat"},
+	},
 	xurkitree: {
 		inherit: true,
 		abilities: {0: "Lightning Rod"},
@@ -848,6 +853,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	ironbundle: {
 		inherit: true,
 		abilities: {0: "Screen Cleaner"},
+	},
+	spidops: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 79, def: 92, spa: 52, spd: 86, spe: 50},
+	},
+	magnezone: {
+		inherit: true,
+		abilities: {0: "Magnet Pull", 1: "Sturdy", H: "Analytic", S: "Levitate"},
 	},
 };
 
