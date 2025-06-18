@@ -727,8 +727,8 @@ export class BattleActions {
 				}
 			}
 			if (move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||
-				(this.battle.format.mod === "Batzi" && move.id === 'thunderwave' && pokemon.hasType('Electric')) ||
-				(this.battle.format.mod === "Batzi" && move.id === 'willowisp' && pokemon.hasType('Fire')) ||
+				(this.battle.format.mod === "gen9batzi" && move.id === 'thunderwave' && pokemon.hasType('Electric')) ||
+				(this.battle.format.mod === "gen9batzi" && move.id === 'willowisp' && pokemon.hasType('Fire')) ||
 					(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())) {
 				accuracy = true; // bypasses ohko accuracy modifiers
 			} else {
