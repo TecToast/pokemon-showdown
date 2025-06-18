@@ -479,8 +479,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onModifyType(move, pokemon) {
 			const name = pokemon.species.name;
 			if (!name.startsWith("Silvally-")) return;
-			const type = name.substring(name.indexOf("-") + 1);
-			move.type = type;
+			move.type = name.substring(name.indexOf("-") + 1);
 		},
-	}
+	},
 };
