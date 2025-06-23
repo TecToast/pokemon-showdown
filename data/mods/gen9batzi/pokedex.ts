@@ -156,7 +156,9 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	darmanitanzen: {
 		inherit: true,
-		abilities: {0: "Zen Mode", 1: "Magic Guard"},
+		abilities: {0: "Magic Guard"},
+		requiredAbility: undefined,
+		battleOnly: undefined,
 	},
 	delcatty: {
 		inherit: true,

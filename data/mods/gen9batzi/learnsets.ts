@@ -14024,6 +14024,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			springtidestorm: ["9M"],
 			bleakwindstorm: ["9M"],
 			wildboltstorm: ["9M"],
+			sandsearstorm: ["9M"],
 			sludgebomb: ["9M"],
 			defog: ["9M"],
 			attract: ["8M"],
