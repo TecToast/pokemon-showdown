@@ -33,6 +33,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
 			}
 		},
+		shortDesc: "This Pokemon's ball-based attacks become two-strike moves. Second hit deals 0.25× damage."
 	},
 	disguise: {
 		inherit: true,
@@ -56,6 +57,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				pokemon.formeChange(speciesid, this.effect, true);
 			}
 		},
+		shortDesc: "(Mimikyu only) First hit deals 0 damage, breaks disguise."
 	},
 	liquidvoice: {
 		inherit: true,
@@ -69,5 +71,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
+	},
+	comatose: {
+		inherit: true,
+		shortDesc: "This Pokemon cannot be statused, and is considered to be asleep. Can use Rest without falling asleep.",
+	},
+	fullmetalbody: {
+		inherit: true,
+		shortDesc: "Prevents other Pokemon from lowering this Pokemon's stat stages. Blocks Defog.",
+	},
+	clearbody: {
+		inherit: true,
+		shortDesc: "Prevents other Pokemon from lowering this Pokemon's stat stages. Blocks Defog.",
+	},
+	whitesmoke: {
+		inherit: true,
+		shortDesc: "Prevents other Pokemon from lowering this Pokemon's stat stages. Blocks Defog.",
 	},
 };

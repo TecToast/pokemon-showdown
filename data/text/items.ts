@@ -2545,4 +2545,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Vile Vial",
 		shortDesc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
 	},
+
+	// Batzi
+
+	scrappyscent: {
+		name: "Scrappy Scent",
+		shortDesc: "Holder's Fighting, Normal moves hit Ghost type Pokemon.",
+	},
 };

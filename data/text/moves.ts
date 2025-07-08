@@ -7612,4 +7612,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Nearly always goes first. Always crits.",
 		},
 	},
+	// Batzi
+	bananarang: {
+		name: "Bananarang",
+		shortDesc: "Power increases by 10% if used on consecutive turns. Max 1.5x after 5 turns.",
+	},
 };

@@ -2281,4 +2281,17 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		activate: "  [POKEMON] extends [MOVE] by 2 turns!",
 	},
+	// Batzi
+	kingsguard: {
+		name: "King's Guard",
+		shortDesc: "This Pokemon is protected from opposing priority moves.",
+	},
+	sharknado: {
+		name: "Sharknado",
+		shortDesc: "This Pokemon's Speed is raised 1 stage at the end of each full turn on the field. Bite-based attacks have 1.5x power.",
+	},
+	volumeamplification: {
+		name: "Volume Amplification",
+		shortDesc: "This Pokemon's sound-based attacks have 1.2x power.",
+	},
 };

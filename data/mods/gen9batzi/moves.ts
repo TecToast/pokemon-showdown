@@ -39,12 +39,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePowerCallback(pokemon) {
 			return Math.min(170, 50 + 20 * pokemon.timesAttacked);
 		},
+		shortDesc: "+20 power for each time user was hit. Max 6 hits.",
 	},
 	lastrespects: {
 		inherit: true,
 		basePowerCallback(pokemon, target, move) {
 			return 50 + 20 * pokemon.side.totalFainted;
 		},
+		shortDesc: "+20 power for each time a party member fainted.",
 	},
 	lifedew: {
 		inherit: true,
@@ -393,6 +395,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onMoveFail(target, source, move) {
 			this.damage(source.baseMaxhp / 3, source, source, this.dex.conditions.get('Supercell Slam'));
 		},
+		shortDesc: "User is hurt by 1/3 of its max HP if it misses."
 	},
 	throatchop: {
 		inherit: true,
@@ -426,9 +429,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-end', target, 'Throat Chop', '[silent]');
 			},
 		},
+		shortDesc: "For 3 turns, the target cannot use sound moves.",
 	},
 	thunderwave: {
 		inherit: true,
+		shortDesc: "Paralyzes the target. Electric types can't miss.",
 	},
 	triplekick: {
 		inherit: true,
@@ -441,6 +446,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	willowisp: {
 		inherit: true,
+		shortDesc: "Burns the target. Fire types can't miss.",
 	},
 	pyroball: {
 		inherit: true,

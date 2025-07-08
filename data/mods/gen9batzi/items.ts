@@ -85,6 +85,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				return this.chainModify(1 + 0.5 * result);
 			}
 		},
+		shortDesc: "If holder's species can evolve, its Def and Sp. Def are 1.5x. If it can evolve two times, its Def and Sp. Def are 2x.",
 	},
 	buggem: {
 		inherit: true,

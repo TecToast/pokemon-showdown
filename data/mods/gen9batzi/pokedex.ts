@@ -1,3 +1,5 @@
+import {isUndefined} from "node:util";
+
 export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable = {
 	abomasnow: {
 		inherit: true,
@@ -35,7 +37,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	audinomega: {
 		inherit: true,
 		types: ["Fairy"],
-		abilities: {0: "Healer", 1: "Regenerator"},
+		abilities: {0: "Regenerator"},
 	},
 	avalugg: {
 		inherit: true,
@@ -718,6 +720,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		baseStats: {hp: 55, atk: 140, def: 130, spa: 140, spd: 135, spe: 20},
 		abilities: {0: "Schooling", 1: "Storm Drain", H: "Pressure"},
+		requiredAbility: undefined,
+		battleOnly: undefined,
 	},
 	wormadamsandy: {
 		inherit: true,
