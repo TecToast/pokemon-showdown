@@ -8349,7 +8349,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1000,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	appletunite: {
@@ -8363,7 +8363,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1001,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	blastoisitex: {
@@ -8377,7 +8377,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1002,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	butterfrite: {
@@ -8391,7 +8391,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1003,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	centiskorchite: {
@@ -8405,7 +8405,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1004,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	cinderacite: {
@@ -8419,7 +8419,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1005,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	coalossalite: {
@@ -8433,7 +8433,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1006,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	copperajahite: {
@@ -8447,7 +8447,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1007,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	corviknightite: {
@@ -8461,7 +8461,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1008,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	drednawite: {
@@ -8475,7 +8475,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1009,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	flapplite: {
@@ -8489,7 +8489,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1010,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	garbodorite: {
@@ -8503,7 +8503,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1011,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	grimmsnarlite: {
@@ -8517,7 +8517,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1012,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	hatterenite: {
@@ -8531,7 +8531,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1013,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	inteleonite: {
@@ -8545,7 +8545,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1014,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	kinglerite: {
@@ -8559,7 +8559,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1015,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	laprasite: {
@@ -8573,7 +8573,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1016,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	luvdiscite: {
@@ -8587,7 +8587,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1017,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	machampite: {
@@ -8601,7 +8601,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1018,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	meowthite: {
@@ -8615,7 +8615,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1019,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	orbeetlite: {
@@ -8629,7 +8629,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1020,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	rillaboomite: {
@@ -8643,7 +8643,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1021,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	sandacondite: {
@@ -8657,7 +8657,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1022,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	snorlaxite: {
@@ -8671,7 +8671,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1023,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	toxtricityite: {
@@ -8685,7 +8685,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1024,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	venusauritex: {
@@ -8699,7 +8699,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		num: -1025,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "Batzi",
 	},
 	scrappyscent: {
