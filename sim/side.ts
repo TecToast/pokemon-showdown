@@ -90,6 +90,7 @@ export interface PokemonSwitchRequestData {
 	teraType?: string;
 	terastallized?: string;
 }
+
 export interface PokemonMoveRequestData {
 	moves: { move: string, id: ID, target?: string, disabled?: string | boolean, disabledSource?: string }[];
 	maybeDisabled?: boolean;
@@ -105,10 +106,12 @@ export interface PokemonMoveRequestData {
 	maxMoves?: DynamaxOptions;
 	canTerastallize?: string;
 }
+
 export interface DynamaxOptions {
 	maxMoves: ({ move: string, target: MoveTarget, disabled?: boolean })[];
 	gigantamax?: string;
 }
+
 export interface SideRequestData {
 	name: string;
 	/** Side ID (`p1`, `p2`, `p3`, or `p4`), not the ID of the side's name. */
@@ -116,6 +119,7 @@ export interface SideRequestData {
 	pokemon: PokemonSwitchRequestData[];
 	noCancel?: boolean;
 }
+
 export interface SwitchRequest {
 	wait?: undefined;
 	teamPreview?: undefined;
@@ -124,6 +128,7 @@ export interface SwitchRequest {
 	noCancel?: boolean;
 	update?: boolean;
 }
+
 export interface TeamPreviewRequest {
 	wait?: undefined;
 	teamPreview: true;
@@ -132,6 +137,7 @@ export interface TeamPreviewRequest {
 	side: SideRequestData;
 	noCancel?: boolean;
 }
+
 export interface MoveRequest {
 	wait?: undefined;
 	teamPreview?: undefined;
@@ -142,6 +148,7 @@ export interface MoveRequest {
 	noCancel?: boolean;
 	update?: boolean;
 }
+
 export interface WaitRequest {
 	wait: true;
 	teamPreview?: undefined;
@@ -149,6 +156,7 @@ export interface WaitRequest {
 	side: SideRequestData;
 	noCancel?: boolean;
 }
+
 export type ChoiceRequest = SwitchRequest | TeamPreviewRequest | MoveRequest | WaitRequest;
 
 export class Side {
@@ -219,7 +227,8 @@ export class Side {
 		case 'doubles':
 			this.active = [null!, null!];
 			break;
-		case 'triples': case 'rotation':
+		case 'triples':
+		case 'rotation':
 			this.active = [null!, null!, null!];
 			break;
 		default:
@@ -231,7 +240,11 @@ export class Side {
 		this.faintedThisTurn = null;
 		this.totalFainted = 0;
 		this.zMoveUsed = false;
-		this.dynamaxUsed = this.battle.gen !== 8;
+		if (this.battle.format.name === '[Gen 9] BEL') {
+			this.dynamaxUsed = false;
+		} else {
+			this.dynamaxUsed = this.battle.gen !== 8;
+		}
 
 		this.sideConditions = {};
 		this.slotConditions = [];
@@ -278,7 +291,7 @@ export class Side {
 	}
 
 	canDynamaxNow(): boolean {
-		if (this.battle.gen !== 8) return false;
+		if (this.battle.format.name !== '[Gen 9] BEL' && this.battle.gen !== 8) return false;
 		// In multi battles, players on a team are alternatingly given the option to dynamax each turn
 		// On turn 1, the players on their team's respective left have the first chance (p1 and p2)
 		if (this.battle.gameType === 'multi' && this.battle.turn % 2 !== [1, 1, 0, 0][this.n]) return false;
@@ -345,6 +358,7 @@ export class Side {
 
 		return [this.foe];
 	}
+
 	foePokemonLeft() {
 		if (this.battle.gameType === 'freeforall') {
 			return this.battle.sides.filter(side => side !== this).map(side => side.pokemonLeft).reduce((a, b) => a + b);
@@ -354,6 +368,7 @@ export class Side {
 
 		return this.foe.pokemonLeft;
 	}
+
 	allies(all?: boolean) {
 		// called during the first switch-in, so `active` can still contain nulls at this point
 		let allies = this.activeTeam().filter(ally => ally);
@@ -361,6 +376,7 @@ export class Side {
 
 		return allies;
 	}
+
 	foes(all?: boolean) {
 		if (this.battle.gameType === 'freeforall') {
 			return this.battle.sides.map(side => side.active[0])
@@ -368,11 +384,13 @@ export class Side {
 		}
 		return this.foe.allies(all);
 	}
+
 	activeTeam() {
 		if (this.battle.gameType !== 'multi') return this.active;
 
 		return this.battle.sides[this.n % 2].active.concat(this.battle.sides[this.n % 2 + 2].active);
 	}
+
 	hasAlly(pokemon: Pokemon) {
 		return pokemon.side === this || pokemon.side === this.allySide;
 	}
@@ -931,18 +949,20 @@ export class Side {
 
 		if (this.requestState === 'move') {
 			if (pokemon.trapped) {
-				return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, { pokemon, update: req => {
-					let updated = false;
-					if (req.maybeTrapped) {
-						delete req.maybeTrapped;
-						updated = true;
-					}
-					if (!req.trapped) {
-						req.trapped = true;
-						updated = true;
-					}
-					return updated;
-				} });
+				return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, {
+					pokemon, update: req => {
+						let updated = false;
+						if (req.maybeTrapped) {
+							delete req.maybeTrapped;
+							updated = true;
+						}
+						if (!req.trapped) {
+							req.trapped = true;
+							updated = true;
+						}
+						return updated;
+					},
+				});
 			} else if (pokemon.maybeTrapped) {
 				this.choice.cantUndo = true;
 			}

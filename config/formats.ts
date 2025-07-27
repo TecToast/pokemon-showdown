@@ -53,6 +53,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1', '+Batzi'],
 	},
 	{
+		name: "[Gen 9] NatDex BEL",
+		mod: 'gen9',
+		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1'],
+	},
+	{
 		section: "S/V Singles",
 	},
 	{
