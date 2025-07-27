@@ -110,8 +110,8 @@ export const Replays = new class {
 				});
 			}
 		} catch (e: any) {
-			if (e?.routine !== 'NewUniquenessConstraintViolationError') throw e;
-			await replays.update(replay.id, {
+			if (e?.routine !== 'NewUniquenessConstraintViolationError' && e?.routine !== '_bt_check_unique') throw e;
+			/* await replays.update(replay.id, {
 				log: replayData.log,
 				inputlog: replayData.inputlog,
 				rating: replayData.rating,
@@ -122,7 +122,7 @@ export const Replays = new class {
 				rating: replayData.rating,
 				private: replayData.private,
 				password: replayData.password,
-			})`WHERE id = ${replay.id}`;
+			})`WHERE id = ${replay.id}`; */
 		}
 		return replayData.id + (replayData.password ? `-${replayData.password}pw` : '');
 	}
