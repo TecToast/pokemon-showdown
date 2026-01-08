@@ -58,6 +58,16 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1'],
 	},
 	{
+		name: "[Gen 9] DML Custom",
+		mod: 'gen9dml',
+		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1', '+DML', '+LGPE'],
+	},
+	{
+		name: "[Gen 9] DML Custom Doubles",
+		mod: 'gen9dml',
+		gameType: 'doubles',
+		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1', '+DML', '+LGPE'],
+	},
 		section: "S/V Singles",
 	},
 	{

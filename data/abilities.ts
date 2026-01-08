@@ -5683,4 +5683,183 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 244,
 		isNonstandard: "Batzi",
 	},
+	heeltactics: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Fighting') {
+				this.debug('Heel Tactics boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Fighting') {
+				this.debug('Heel Tactics boost');
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+		name: "Heel Tactics",
+		rating: 3.5,
+		num: 276,
+		isNonstandard: "DML",
+	},
+	parasite: {
+		onStart(source) {
+			for (const target of source.adjacentFoes()) {
+				if (target.hasType('Grass')) continue;
+				target.addVolatile('leechseed', source);
+			}
+		},
+		flags: {},
+		name: "Parasite",
+		rating: 4,
+		num: 226,
+		isNonstandard: "DML",
+	},
+	fallenangel: {
+		name: "Fallen Angel",
+		rating: 4,
+		num: 0,
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (
+				move && (move.type === 'Dark' || move.type === 'Fairy')
+			) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		isNonstandard: "DML",
+	},
+	bloodstain: {
+		onFoeSwitchOut(pokemon) {
+			this.damage(pokemon.hp * 15 / 100, pokemon);
+		},
+		flags: {},
+		name: "Bloodstain",
+		rating: 4.5,
+		num: 144,
+		isNonstandard: "DML",
+	},
+	spontaneouscombustion: {
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			if (this.randomChance(15, 100)) {
+				this.add('-ability', pokemon, 'Spontaneous Combustion');
+				for (const target of this.getAllActive()) {
+					target.faint(pokemon);
+				}
+			}
+		},
+		flags: {},
+		name: "Spontaneous Combustion",
+		rating: 0,
+		num: 131,
+		isNonstandard: "DML",
+	},
+	swampwalker: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Bug') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Swampwalker');
+				}
+				return null;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Swampwalker",
+		rating: 3.5,
+		num: 11,
+		isNonstandard: "DML",
+	},
+	raininggold: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.id === 'makeitrain') {
+				return 80;
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (move.id !== 'makeitrain') return;
+			for (const side of source.side.foeSidesWithConditions()) {
+				side.addSideCondition('gmaxsteelsurge');
+			}
+		},
+		flags: {},
+		name: "Raining Gold",
+		rating: 4,
+		num: 184,
+		isNonstandard: "DML",
+	},
+	burningmalice: {
+		onModifyMovePriority: -1,
+		onModifyMove(move) {
+			if (move.category !== "Status") {
+				this.debug('Adding Burning Malice burn chance');
+				if (!move.secondaries) move.secondaries = [];
+				for (const secondary of move.secondaries) {
+					if (secondary.status === 'brn') return;
+				}
+				move.secondaries.push({
+					chance: 30,
+					status: 'brn',
+				});
+			}
+		},
+		flags: {},
+		name: "Burning Malice",
+		rating: 0.5,
+		num: 1,
+		isNonstandard: "DML",
+	},
+	heavyplating: {
+		onStart(pokemon) {
+			this.boost({ def: 1, spd: 1 }, pokemon);
+		},
+		onDisableMove(pokemon) {
+			for (const moveSlot of pokemon.moveSlots) {
+				const move = this.dex.moves.get(moveSlot.id);
+				if (move.category === 'Status' && move.id !== 'mefirst') {
+					pokemon.disableMove(moveSlot.id);
+				}
+			}
+		},
+		flags: {},
+		name: "Heavy Plating",
+		rating: 4,
+		num: 234,
+		isNonstandard: "DML",
+	},
+	stormy: {
+		onModifyMovePriority: -1,
+		onModifyMove(move) {
+			const boostedMoves = ['bleakwindstorm', 'sandsearstorm', 'springtidestorm', 'wildboltstorm', 'hurricane'];
+			if (boostedMoves.includes(move.id)) {
+				this.debug('Adding stormy boost');
+				move.accuracy = true;
+			}
+		},
+		onModifyDamage(damage, source, target, move) {
+			const boostedMoves = ['bleakwindstorm', 'sandsearstorm', 'springtidestorm', 'wildboltstorm', 'hurricane'];
+			if (boostedMoves.includes(move.id)) {
+				return this.chainModify([4505, 4096]);
+			}
+		},
+		flags: {},
+		name: "Stormy",
+		rating: 0.5,
+		num: 1,
+		isNonstandard: "DML",
+	},
+	toxicencounter: {
+		onStart(source) {
+			this.actions.useMove('toxicspikes', source);
+		},
+		flags: {},
+		name: "Toxic Encounter",
+		rating: 4,
+		num: 70,
+		isNonstandard: "DML",
+	},
 };
