@@ -143,13 +143,14 @@ export function generateFormatSchedule() {
 }
 
 export async function getLadderTop(format: string) {
-	try {
+	/* try {
 		const results = await Net(`https://${Config.routes.root}/ladder/?format=${toID(format)}&json`).get();
 		const reply = JSON.parse(results);
 		return reply.toplist;
 	} catch {
 		return null;
-	}
+	}*/
+	return null;
 }
 
 export async function updateBadgeholders() {
