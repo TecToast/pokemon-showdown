@@ -139,10 +139,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		multihit: undefined,
 		basePower: 90,
 		shortDesc: "Deals damage. No additional effect.",
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1 },
 	},
 	crabhammer: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, punch: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, punch: 1 },
 	},
 	crosschop: {
 		inherit: true,
@@ -152,13 +153,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		category: "Special",
 		basePower: 90,
-		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
 	},
 	defog: {
 		inherit: true,
 		onHit(target, source, move) {
 			let success = false;
-			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
+			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 });
 			if (!target.hasAbility(['clearbody', 'whitesmoke', 'fullmetalbody'])) {
 				const removeTarget = [
 					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
@@ -186,11 +187,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mountaingale: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1, bite: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bite: 1 },
 	},
 	electricterrain: {
 		inherit: true,
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -213,6 +215,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					return null;
 				}
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
@@ -220,8 +223,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 			onFieldStart(field, source, effect) {
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Electric Terrain');
 				}
@@ -236,6 +239,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	grassyterrain: {
 		inherit: true,
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -243,6 +247,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				return 5;
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
 				if (weakenedMoves.includes(move.id) && defender.isGrounded() && !defender.isSemiInvulnerable()) {
@@ -255,8 +260,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 			onFieldStart(field, source, effect) {
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Grassy Terrain');
 				}
@@ -280,6 +285,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	psychicterrain: {
 		inherit: true,
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -303,6 +309,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-activate', target, 'move: Psychic Terrain');
 				return null;
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Psychic' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('psychic terrain boost');
@@ -310,8 +317,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 			onFieldStart(field, source, effect) {
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Psychic Terrain');
 				}
@@ -337,11 +344,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	flashcannon: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1, pulse: 1, bullet: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, pulse: 1, bullet: 1 },
 	},
 	focusblast: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1, pulse: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1, pulse: 1 },
 	},
 	grassyglide: {
 		inherit: true,
@@ -367,7 +374,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	moonblast: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
 	},
 	populationbomb: {
 		inherit: true,
@@ -395,7 +402,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onMoveFail(target, source, move) {
 			this.damage(source.baseMaxhp / 3, source, source, this.dex.conditions.get('Supercell Slam'));
 		},
-		shortDesc: "User is hurt by 1/3 of its max HP if it misses."
+		shortDesc: "User is hurt by 1/3 of its max HP if it misses.",
 	},
 	throatchop: {
 		inherit: true,
@@ -450,31 +457,31 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	pyroball: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, defrost: 1, bullet: 1, ball: 1},
+		flags: { protect: 1, mirror: 1, defrost: 1, bullet: 1, ball: 1 },
 	},
 	electroball: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1 },
 	},
 	energyball: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1 },
 	},
 	gyroball: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1 },
 	},
 	mistball: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1 },
 	},
 	shadowball: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1 },
 	},
 	weatherball: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1, ball: 1 },
 	},
 	chatter: {
 		inherit: true,
