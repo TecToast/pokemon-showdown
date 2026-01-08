@@ -296,6 +296,10 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		name: "DML",
 		speciesFilter: thing => thing.isNonstandard === 'DML',
 	},
+	mnm: {
+		name: "MNM",
+		speciesFilter: thing => thing.isNonstandard === 'MNM',
+	},
 	custom: {
 		name: "Custom",
 		genericFilter: thing => thing.isNonstandard === 'Custom',

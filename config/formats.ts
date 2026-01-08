@@ -68,6 +68,20 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1', '+DML', '+LGPE'],
 	},
+	{
+		name: "[Gen 9] MNM - Dawnlight",
+		mod: 'gen9mnm',
+		ruleset: ['Standard AG', '+Unobtainable', '+Past', 'Min Source Gen = 1', '+MNM'],
+		banlist: ['Shell Smash', 'Revival Blessing', 'Kinesis'],
+	},
+	{
+		name: "[Gen 9] MNM - Dawnlight - Doubles",
+		mod: 'gen9mnm',
+		ruleset: ['Standard AG', '+Unobtainable', '+Past', 'Min Source Gen = 1', '+MNM'],
+		gameType: 'doubles',
+		banlist: ['Shell Smash', 'Revival Blessing', 'Kinesis'],
+	},
+	{
 		section: "S/V Singles",
 	},
 	{

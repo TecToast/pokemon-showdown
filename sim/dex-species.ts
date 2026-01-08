@@ -441,7 +441,7 @@ export class DexSpecies {
 		if (species) return species;
 
 		const alias = this.dex.getAlias(id);
-		if (alias) {
+		if (alias && ((this.dex.currentMod !== 'gen9mnm') || !this.dex.data.Pokedex.hasOwnProperty(id))) {
 			if (this.dex.data.FormatsData.hasOwnProperty(id)) {
 				// special event ID
 				species = new Species({

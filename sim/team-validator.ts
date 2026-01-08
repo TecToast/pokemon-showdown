@@ -1811,7 +1811,7 @@ export class TeamValidator {
 		// +Mythical to unban Shaymin in Gen 1, for instance.
 		let nonexistentCheck = Tags.nonexistent.genericFilter!(tierSpecies) && ruleTable.check('nonexistent');
 
-		const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'batzi', 'custom', 'nonexistent'];
+		const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'batzi', 'dml', 'mnm', 'custom', 'nonexistent'];
 
 		for (const ruleid of ruleTable.tagRules) {
 			if (ruleid.startsWith('*')) continue;
@@ -2523,7 +2523,7 @@ export class TeamValidator {
 				}
 			}
 
-			const formeCantInherit = dex.species.eggMovesOnly(species, baseSpecies);
+			const formeCantInherit = (this.format.mod === 'gen9mnm' && species.id === 'darmanitangalar') ? false : dex.species.eggMovesOnly(species, baseSpecies);
 			if (formeCantInherit && dex.gen < 9) break;
 
 			let sources = learnset[moveid] || [];
@@ -2609,7 +2609,7 @@ export class TeamValidator {
 					continue;
 				}
 
-				if (species.isNonstandard !== 'CAP') {
+				if (this.format.mod !== 'gen9mnm' && species.isNonstandard !== 'CAP') {
 					// HMs can't be transferred
 					if (dex.gen >= 4 && learnedGen <= 3 && [
 						'cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive',
@@ -2877,7 +2877,7 @@ export class TeamValidator {
 		const backupSources = setSources.sources;
 		const backupSourcesBefore = setSources.sourcesBefore;
 		setSources.intersectWith(moveSources);
-		if (!setSources.size()) {
+		if (this.format.mod !== 'gen9mnm' && !setSources.size()) {
 			// pretend this pokemon didn't have this move:
 			// prevents a crash if OMs override `checkCanLearn` to keep validating after an error
 			setSources.sources = backupSources;

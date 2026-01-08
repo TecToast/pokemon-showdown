@@ -193,6 +193,7 @@ export class Side {
 	/** these point to the same object as the ally's, in multi battles */
 	sideConditions: { [id: string]: EffectState };
 	slotConditions: { [id: string]: EffectState }[];
+	lastSwarmControlActions: ('switch' | 'attack' | 'status' | 'other')[];
 
 	activeRequest: ChoiceRequest | null;
 	choice: Choice;
@@ -240,7 +241,7 @@ export class Side {
 		this.faintedThisTurn = null;
 		this.totalFainted = 0;
 		this.zMoveUsed = false;
-		if (this.battle.format.name === '[Gen 9] BEL') {
+		if (this.battle.format.name.includes('BEL')) {
 			this.dynamaxUsed = false;
 		} else {
 			this.dynamaxUsed = this.battle.gen !== 8;
@@ -248,8 +249,12 @@ export class Side {
 
 		this.sideConditions = {};
 		this.slotConditions = [];
+		this.lastSwarmControlActions = [];
 		// Array#fill doesn't work for this
-		for (let i = 0; i < this.active.length; i++) this.slotConditions[i] = {};
+		for (let i = 0; i < this.active.length; i++) {
+			this.slotConditions[i] = {};
+			this.lastSwarmControlActions[i] = 'other';
+		}
 
 		this.activeRequest = null;
 		this.choice = {
@@ -291,7 +296,7 @@ export class Side {
 	}
 
 	canDynamaxNow(): boolean {
-		if (this.battle.format.name !== '[Gen 9] BEL' && this.battle.gen !== 8) return false;
+		if (!this.battle.format.name.includes('BEL') && this.battle.gen !== 8) return false;
 		// In multi battles, players on a team are alternatingly given the option to dynamax each turn
 		// On turn 1, the players on their team's respective left have the first chance (p1 and p2)
 		if (this.battle.gameType === 'multi' && this.battle.turn % 2 !== [1, 1, 0, 0][this.n]) return false;

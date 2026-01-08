@@ -64,6 +64,9 @@ interface MoveFlags {
 	sound?: 1; // Has no effect on Pokemon with the Ability Soundproof.
 	wind?: 1; // Activates the Wind Power and Wind Rider Abilities.
 	ball?: 1; // Ball Fetch stuff (Batzi)
+	heat?: 1;
+	cold?: 1;
+	kick?: 1;
 }
 
 export interface HitEffect {

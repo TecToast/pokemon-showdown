@@ -8717,4 +8717,83 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 	},
+	tealmask: {
+		name: "Teal Mask",
+		spritenum: 762,
+		num: -1027,
+		gen: 9,
+		isNonstandard: "MNM",
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+			return true;
+		},
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.name.startsWith('Ogerpon-Teal')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		shortDesc: "If Ogerpon-Teal: 1.2x power attacks; Terastallize to gain Embody Aspect",
+	},
+	scrollofwaters: {
+		name: "Scroll of Waters",
+		spritenum: 763,
+		num: -1028,
+		gen: 9,
+		isNonstandard: "MNM",
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
+			if (move.type === 'Water' && source.useItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		shortDesc: "If Urshifu-Rapid: Holder's first successful Water-type attack will have 1.5x power. Single use.",
+	},
+	scrollofdarkness: {
+		name: "Scroll of Darkness",
+		spritenum: 764,
+		num: -1029,
+		gen: 9,
+		isNonstandard: "MNM",
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if (move.type === 'Dark' && source.useItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		shortDesc: "If Urshifu-Single: Holder's first successful Dark-type attack will have 1.5x power. Single use."
+	},
+	blackaugurite: {
+		name: "Black Augurite",
+		spritenum: 765,
+		num: -1030,
+		gen: 9,
+		isNonstandard: "MNM",
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.species.id === 'kleavor' && move.flags['slicing']) {
+				this.debug('Black Augurite boost');
+				return this.chainModify(1.3);
+			}
+		},
+		shortDesc: "If Kleavor: The holder's slicing moves have their power multiplied by 1.3x.",
+	},
+	peatblock: {
+		name: "Peat Block",
+		spritenum: 766,
+		num: -1030,
+		gen: 9,
+		isNonstandard: "MNM",
+		onDamagingHit(damage, target, source, move) {
+			if (!move.flags['contact'] || target.species.id !== 'ursaluna') return;
+			target.useItem();
+		},
+		onUseItem(item, pokemon) {
+			this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
+		},
+		onModifyMove(move, source, target) {
+			if (source.species.id !== 'ursaluna' || move.type !== 'Ground') return;
+			move.drain = [1, 4];
+		},
+		shortDesc: "If Ursaluna: Recovers 1/4 of Ground-type damage dealt. If hit by a contact move; Breaks, giving the holder +1 Def/Sp.Def.",
+	},
 };

@@ -266,6 +266,7 @@ export class Pokemon {
 	duringMove: boolean;
 
 	weighthg: number;
+	heightm: number;
 	speed: number;
 
 	canMegaEvo: string | false | null | undefined;
@@ -301,6 +302,7 @@ export class Pokemon {
 	m: {
 		innate?: string, // Partners in Crime
 		originalSpecies?: string, // Mix and Mega
+		moveLastTurnCategory?: 'Physical' | 'Special' | 'Status',
 		[key: string]: any,
 	};
 
@@ -480,6 +482,7 @@ export class Pokemon {
 		this.duringMove = false;
 
 		this.weighthg = 1;
+		this.heightm = 1;
 		this.speed = 0;
 
 		this.canMegaEvo = this.battle.actions.canMegaEvo(this);
@@ -620,7 +623,13 @@ export class Pokemon {
 
 		// stat modifier effects
 		if (!unmodified) {
-			const statTable: { [s in StatIDExceptHP]: string } = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
+			const statTable: { [s in StatIDExceptHP]: string } = {
+				atk: 'Atk',
+				def: 'Def',
+				spa: 'SpA',
+				spd: 'SpD',
+				spe: 'Spe',
+			};
 			stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
 		}
 
@@ -649,6 +658,25 @@ export class Pokemon {
 		const stats: StatIDExceptHP[] = ['atk', 'def', 'spa', 'spd', 'spe'];
 		for (const i of stats) {
 			if (this.getStat(i, unboosted, unmodified) > bestStat) {
+				statName = i;
+				bestStat = this.getStat(i, unboosted, unmodified);
+			}
+		}
+
+		return statName;
+	}
+
+	/**
+	 * Gets the Pokemon's best stat.
+	 * Moved to its own method due to frequent use of the same code.
+	 * Used by Beast Boost, Quark Drive, and Protosynthesis.
+	 */
+	getWorstStat(unboosted?: boolean, unmodified?: boolean): StatIDExceptHP {
+		let statName: StatIDExceptHP = 'atk';
+		let bestStat = Number.MAX_SAFE_INTEGER;
+		const stats: StatIDExceptHP[] = ['atk', 'def', 'spa', 'spd', 'spe'];
+		for (const i of stats) {
+			if (this.getStat(i, unboosted, unmodified) < bestStat) {
 				statName = i;
 				bestStat = this.getStat(i, unboosted, unmodified);
 			}
@@ -1213,7 +1241,7 @@ export class Pokemon {
 
 	copyVolatileFrom(pokemon: Pokemon, switchCause?: string | boolean) {
 		this.clearVolatile();
-		if (switchCause !== 'shedtail') this.boosts = pokemon.boosts;
+		if (switchCause !== 'shedtail' && this.battle.format.mod !== 'gen9mnm') this.boosts = pokemon.boosts;
 		for (const i in pokemon.volatiles) {
 			if (switchCause === 'shedtail' && i !== 'substitute') continue;
 			if (this.battle.dex.conditions.getByID(i as ID).noCopy) continue;
@@ -1258,6 +1286,7 @@ export class Pokemon {
 
 		this.transformed = true;
 		this.weighthg = pokemon.weighthg;
+		this.heightm = pokemon.heightm;
 
 		const types = pokemon.getTypes(true, true);
 		this.setType(pokemon.volatiles['roost'] ? pokemon.volatiles['roost'].typeWas : types, true);
@@ -1360,6 +1389,7 @@ export class Pokemon {
 		this.addedType = species.addedType || '';
 		this.knownType = true;
 		this.weighthg = species.weighthg;
+		this.heightm = species.heightm;
 
 		const stats = this.battle.spreadModify(this.species.baseStats, this.set);
 		if (this.species.maxHP) stats.hp = this.species.maxHP;
@@ -1703,6 +1733,11 @@ export class Pokemon {
 
 		this.status = status.id;
 		this.statusState = this.battle.initEffectState({ id: status.id, target: this });
+		if (this.battle.format.mod === 'gen9mnm') {
+			if (this.species.name === 'Shaymin-Sky' && this.baseSpecies.baseSpecies === 'Shaymin') {
+				this.formeChange('Shaymin', sourceEffect, false);
+			}
+		}
 		if (source) this.statusState.source = source;
 		if (status.duration) this.statusState.duration = status.duration;
 		if (status.durationCallback) {
@@ -1739,21 +1774,29 @@ export class Pokemon {
 	}
 
 	eatItem(force?: boolean, source?: Pokemon, sourceEffect?: Effect) {
-		if (!this.item) return false;
+		if (!this.item && !Object.keys(this.volatiles).some(v => v.startsWith("item:"))) return false;
 		if ((!this.hp && this.item !== 'jabocaberry' && this.item !== 'rowapberry') || !this.isActive) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
-		const item = this.getItem();
+		let item = this.getItem();
+		let receiverBerry = false;
 		if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
-			// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
-			return false;
+			if (this.battle.format.mod === 'gen9mnm' && this.hasAbility('receiver')) {
+				item = sourceEffect;
+				receiverBerry = true;
+			} else {
+				// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
+				return false;
+			}
 		}
 		if (
 			this.battle.runEvent('UseItem', this, null, null, item) &&
 			(force || this.battle.runEvent('TryEatItem', this, null, null, item))
 		) {
-			this.battle.add('-enditem', this, item, '[eat]');
+			if (!receiverBerry) {
+				this.battle.add('-enditem', this, item, '[eat]');
+			}
 
 			this.battle.singleEvent('Eat', item, this.itemState, this, source, sourceEffect);
 			this.battle.runEvent('EatItem', this, source, sourceEffect, item);
@@ -1769,10 +1812,13 @@ export class Pokemon {
 				}
 				this.pendingStaleness = undefined;
 			}
-
-			this.lastItem = this.item;
-			this.item = '';
-			this.battle.clearEffectState(this.itemState);
+			if (receiverBerry) {
+				this.removeVolatile(item);
+			} else {
+				this.lastItem = this.item;
+				this.item = '';
+				this.battle.clearEffectState(this.itemState);
+			}
 			this.usedItemThisTurn = true;
 			this.ateBerry = true;
 			this.battle.runEvent('AfterUseItem', this, null, null, item);
@@ -2171,7 +2217,7 @@ export class Pokemon {
 			}
 		}
 		if (this.species.name === 'Terapagos-Terastal' && this.hasAbility('Tera Shell') &&
-			!this.battle.suppressingAbility(this)) {
+			!this.battle.suppressingAbility(this) && (this.battle.format.mod !== 'gen9mnm' || !this.volatiles['substitute'])) {
 			if (this.abilityState.resisted) return -1; // all hits of multi-hit move should be not very effective
 			if (move.category === 'Status' || move.id === 'struggle' || !this.runImmunity(move) ||
 				totalTypeMod < 0 || this.hp < this.maxhp) {

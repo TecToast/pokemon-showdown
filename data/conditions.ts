@@ -892,4 +892,23 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return bp;
 		},
 	},
+	glacialstorm: {
+		name: 'GlacialStorm',
+		effectType: 'Weather',
+		duration: 0,
+		onFieldStart(field, source, effect) {
+			this.add('-weather', 'GlacialStorm', '[from] ability: ' + effect.name, `[of] ${source}`);
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'GlacialStorm', '[upkeep]');
+			this.eachEvent('Weather');
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+		onWeather(target) {
+			this.damage(target.baseMaxhp / 8);
+		},
+	},
 };

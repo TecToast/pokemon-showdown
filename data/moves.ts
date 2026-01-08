@@ -7495,7 +7495,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-sidestart', side, 'move: G-Max Steelsurge');
 			},
 			onSwitchIn(pokemon) {
-				if (pokemon.hasItem('heavydutyboots')) return;
+				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('solidfooting') || (this.format.id.includes('mnm') && (pokemon.hasAbility('shielddust')))) return;
 				// Ice Face and Disguise correctly get typed damage from Stealth Rock
 				// because Stealth Rock bypasses Substitute.
 				// They don't get typed damage from Steelsurge because Steelsurge doesn't,
@@ -18192,7 +18192,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.effectState.layers++;
 			},
 			onSwitchIn(pokemon) {
-				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
+				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('solidfooting') || (this.format.id.includes('mnm') && (pokemon.hasAbility('shielddust')))) return;
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 			},
@@ -18513,7 +18513,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
 			onSwitchIn(pokemon) {
-				if (pokemon.hasItem('heavydutyboots')) return;
+				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('solidfooting') || (this.format.id.includes('mnm') && (pokemon.hasAbility('shielddust')))) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * (2 ** typeMod) / 8);
 			},
@@ -18641,7 +18641,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
 			onSwitchIn(pokemon) {
-				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
+				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('solidfooting') || (this.format.id.includes('mnm') && (pokemon.hasAbility('shielddust')))) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({ spe: -1 }, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
 			},
@@ -20533,7 +20533,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', `[of] ${pokemon}`);
 					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
+				} else if (pokemon.hasType('Steel') ||
+					pokemon.hasItem('heavydutyboots') ||
+					pokemon.hasAbility('solidfooting') ||
+					(this.format.id.includes('mnm') && (pokemon.hasAbility('shielddust')))) {
 					// do nothing
 				} else if (this.effectState.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
@@ -22138,7 +22141,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Hidden Power Fairy",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
@@ -22152,7 +22155,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Bananarang",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 		self: {
 			volatileStatus: 'bananarang',
 		},
@@ -22180,5 +22183,74 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Grass",
 		contestType: "Tough",
+	},
+	selfinjection: {
+		num: 0,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Self Injection",
+		pp: 5,
+		priority: 0,
+		flags: { snatch: 1, heal: 1, metronome: 1 },
+		onPrepareHit(pokemon) {
+			this.attrLastMove('[still]');
+		},
+		onHit(pokemon) {
+			this.add('-anim', pokemon, 'Bulk Up', pokemon);
+			const hpToHeal = (pokemon.getStat('def') + pokemon.getStat('spd')) / 2;
+			this.heal(hpToHeal, pokemon);
+			this.boost({ atk: 1, def: -1, spd: -1 });
+		},
+		secondary: null,
+		target: "self",
+		type: "Bug",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Clever",
+		shortDesc: "User heals for Def+Sp.Def/2. Then raises user's Atk by 1 and lowers Def and Sp.Def by 1.",
+	},
+	concoursdecheveux: {
+		num: 0,
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		name: "Concours de Cheveux",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1 },
+		onModifyType(move, pokemon) {
+			const types = pokemon.getTypes();
+			let type = types[1];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[0]) type = types[0];
+			move.type = type;
+		},
+		onHit(pokemon) {
+			this.add('-anim', pokemon, 'Take Down', pokemon);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Beautiful",
+		shortDesc: "Type varies based on the user's secondary type.",
+	},
+	aquafang: {
+		num: 0,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		name: "Aqua Fang",
+		pp: 20,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, heal: 1, metronome: 1, contact: 1, bite: 1 },
+		onHit(pokemon) {
+			this.add('-anim', pokemon, 'Bite', pokemon);
+		},
+		drain: [1, 2],
+		secondary: null,
+		target: "normal",
+		type: "Water",
+		contestType: "Clever",
+		shortDesc: "User recovers 50% of the damage dealt.",
 	},
 };

@@ -2351,9 +2351,22 @@ export class Battle {
 		return this.dex.moves.get(move).category || 'Physical';
 	}
 
-	randomizer(baseDamage: number) {
+	randomizer(baseDamage: number, hasActiveDubiousDisc?: boolean) {
 		const tr = this.trunc;
-		return tr(tr(baseDamage * (100 - this.random(16))) / 100);
+		let modifier;
+		if (hasActiveDubiousDisc) {
+			const roll = this.random(32);
+			if (roll <= 12) {
+				modifier = 75 + 2 * roll;
+			} else if (roll === 13) {
+				modifier = 102;
+			} else {
+				modifier = 106 + (roll - 14) * 2;
+			}
+		} else {
+			modifier = 100 - this.random(16);
+		}
+		return tr(tr(baseDamage * modifier) / 100);
 	}
 
 	/**
@@ -2706,7 +2719,7 @@ export class Battle {
 			if (action.pokemon.fainted) return false;
 			this.actions.runMove(action.move, action.pokemon, action.targetLoc, {
 				sourceEffect: action.sourceEffect, zMove: action.zmove,
-				maxMove: action.maxMove, originalTarget: action.originalTarget,
+				maxMove: action.maxMove, originalTarget: action.originalTarget, externalMove: action['externalMove'],
 			});
 			break;
 		case 'megaEvo':

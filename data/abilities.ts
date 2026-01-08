@@ -4883,7 +4883,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.formeChange('Terapagos-Terastal', this.effect, true);
 			}
 		},
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
+		flags: {
+			failroleplay: 1,
+			noreceiver: 1,
+			noentrain: 1,
+			notrace: 1,
+			failskillswap: 1,
+			cantsuppress: 1,
+			notransform: 1,
+		},
 		name: "Tera Shift",
 		rating: 3,
 		num: 307,
@@ -5563,7 +5571,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.heroMessageDisplayed = true;
 			}
 		},
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
+		flags: {
+			failroleplay: 1,
+			noreceiver: 1,
+			noentrain: 1,
+			notrace: 1,
+			failskillswap: 1,
+			cantsuppress: 1,
+			notransform: 1,
+		},
 		name: "Zero to Hero",
 		rating: 5,
 		num: 278,
@@ -5643,7 +5659,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return false;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		name: "King's Guard",
 		rating: 2.5,
 		num: 214,
@@ -5660,7 +5676,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
 			if (pokemon.activeTurns) {
-				this.boost({spe: 1});
+				this.boost({ spe: 1 });
 			}
 		},
 		flags: {},
@@ -5677,7 +5693,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		name: "Volume Amplification",
 		rating: 3.5,
 		num: 244,
@@ -5862,4 +5878,195 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 70,
 		isNonstandard: "DML",
 	},
+	solidfooting: {
+		name: "Solid Footing",
+		rating: 4,
+		num: 70,
+		isNonstandard: "MNM",
+		shortDesc: "When switching in, this Pokemon is unaffected by hazards on its side of the field.",
+	},
+	striker: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['kick']) {
+				this.debug('Striker boost');
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		flags: {},
+		name: "Striker",
+		rating: 3,
+		num: 89,
+		shortDesc: "This Pokemon's kick-based attacks have 1.2x power."
+	},
+	perfectpitch: {
+		name: "Perfect Pitch",
+		rating: 4,
+		num: 90,
+		isNonstandard: "MNM",
+		onAfterMoveSecondarySelfPriority: -1,
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (move.flags['sound'] && move.totalDamage && !pokemon.forceSwitchFlag) {
+				this.heal(move.totalDamage / 3, pokemon, pokemon);
+			}
+		},
+		onBasePowerPriority: 7,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) {
+				this.debug('Perfect pitch');
+				return this.chainModify([4505, 4096]);
+			}
+		},
+		shortDesc: "This Pokemon's sound-based attacks have 1.1x power and heal the user for 1/3 dmg dealt.",
+	},
+	prehistoricpresence: {
+		name: "Prehistoric Presence",
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (prehistoricPresenceTypes.includes(move.type)) {
+				this.debug('Prehistoric Presence weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(spa, attacker, defender, move) {
+			if (prehistoricPresenceTypes.includes(move.type)) {
+				this.debug('Prehistoric Presence weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		shortDesc: "This Pokemon's Rock-Type's weaknesses are negated.",
+	},
+	firstfiddle: {
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.flags['sound']) return priority + 1;
+		},
+		flags: {},
+		name: "First Fiddle",
+		rating: 1.5,
+		num: 177,
+		onBasePowerPriority: 7,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) {
+				this.debug('First Fiddle boost');
+				return this.chainModify([5325, 4096]);
+			}
+		},
+		shortDesc: "This Pokemon's sound-based attacks have 1.3x power and have their priority increased by 1.",
+	},
+	flytrap: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Bug') {
+				this.add('-immune', target, '[from] ability: Fly Trap');
+				if (move.flags['contact']) {
+					source.addVolatile("partiallytrapped");
+				}
+				return null;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Fly Trap",
+		rating: 3.5,
+		num: 11,
+		shortDesc: "This Pokemon traps an opponent that makes contact with a Bug-Type move; Bug immunity.",
+	},
+	glacialstorm: {
+		onStart(source) {
+			this.field.setWeather('glacialstorm');
+		},
+		onAnySetWeather(target, source, weather) {
+			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream', 'glacialstorm'];
+			if (this.field.getWeather().id === 'glacialstorm' && !strongWeathers.includes(weather.id)) return false;
+		},
+		onEnd(pokemon) {
+			if (this.field.weatherState.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('glacialstorm')) {
+					this.field.weatherState.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
+		},
+		flags: {},
+		name: "Glacial Storm",
+		rating: 4.5,
+		num: 189,
+		shortDesc: "On switch-in, intense hail begins until this Ability is not active in battle.",
+	},
+	ooctilliontank: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bullet']) {
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+		name: "O-Octillion Tank",
+		rating: 3,
+		num: 178,
+		shortDesc: "This Pokemon's bullet moves have 1.5x power.",
+	},
+	seismicanticipation: {
+		flags: {},
+		name: "Seismic Anticipation",
+		rating: 3,
+		num: 178,
+		onTryMove(source, target, move) {
+			if (!seismicAnticipationMoveIds.includes(move.id)) return;
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				move: move.id,
+				source,
+				moveData: move,
+			});
+			this.add('-start', source, move.name);
+			return this.NOT_FAIL;
+		},
+		shortDesc: "This Pokemon's Fissure, Earthquake, Magnitude and Bulldoze deal damage 2 Turns after being used.",
+	},
+	swarmcontrol: {
+		onSwitchIn(pokemon) {
+			const foeSide = pokemon.side.foe;
+			const targetLoc = foeSide.active.length - 1 - pokemon.position;
+			const lastAction = foeSide.lastSwarmControlActions[targetLoc];
+			const target = foeSide.active[targetLoc];
+			if (lastAction === 'status') {
+				this.actions.useMove('attackorder', pokemon, { target });
+			} else if (lastAction === 'attack') {
+				this.actions.useMove('healorder', pokemon, { target: pokemon });
+			} else if (lastAction === 'switch') {
+				this.actions.useMove('defendorder', pokemon, { target: pokemon });
+			}
+		},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
+		name: "Swarm Control",
+		rating: 5,
+		num: 150,
+		shortDesc: "When switching in, uses \"Order\"-move, based on opponent's last action.",
+	},
+	majesty: {
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+
+			const dazzlingHolder = this.effectState.target;
+			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				this.add('cant', dazzlingHolder, 'ability: Majesty', move, `[of] ${target}`);
+				return false;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Majesty",
+		rating: 2.5,
+		num: 214,
+		shortDesc: "This Pokemon and its allies are protected from opposing priority moves."
+	},
 };
+
+const prehistoricPresenceTypes = ['Steel', 'Grass', 'Fighting', 'Water', 'Ground'];
+const seismicAnticipationMoveIds = ['fissure', 'earthquake', 'magnitude', 'bulldoze'];
