@@ -441,12 +441,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onModifyMovePriority: -1,
 		onModifyMove: undefined,
-		onAfterMove(target, source, move) {
-			if (['politoed', 'slowking'].includes(source.species.id) && move.category === 'Status') {
-				this.boost({ atk: -1, spa: -1 }, this.sample(source.side.foe.active), source);
-			}
+		onAfterEachBoost(boost, target, source, effect) {
+			this.boost({ atk: -1 }, this.sample(target.side.foe.active), target);
 		},
-		shortDesc: "If Politoed or Slowking: If holder uses a status move; opponent's Atk./Sp.Atk. -1.",
+		shortDesc: "If Politoed or Slowking: If holder has a stat stage changed: opponent's Atk. -1.\n",
 	},
 	dragonscale: {
 		inherit: true,

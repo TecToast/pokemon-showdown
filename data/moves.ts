@@ -22237,7 +22237,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	aquafang: {
 		num: 0,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 65,
 		category: "Physical",
 		name: "Aqua Fang",
 		pp: 20,

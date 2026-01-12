@@ -147,5 +147,17 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				}
 			}
 		},
-	}
+	},
+	stealthcoal: {
+		name: 'Stealth Coal',
+		effectType: 'Condition',
+		onSideStart(side) {
+			this.add('-sidestart', side, 'move: Stealth Coal');
+		},
+		onSwitchIn(pokemon) {
+			if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('solidfooting') || (this.format.id.includes('mnm') && (pokemon.hasAbility('shielddust')))) return;
+			const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('flamethrower')), -6, 6);
+			this.damage(pokemon.maxhp * (2 ** typeMod) / 8);
+		},
+	},
 };

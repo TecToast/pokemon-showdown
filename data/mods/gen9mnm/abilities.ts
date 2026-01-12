@@ -344,8 +344,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	keeneye: {
 		inherit: true,
-		// TODO
-		shortDesc: "This Pokemon cannot be made to miss by another Pokemon's moves or abilities, also it ignores opposing abilities providing a boost to Def/Sp.Def.",
+		onAnyModifyBoost(boosts, pokemon) {
+			const unawareUser = this.effectState.target;
+			if (unawareUser === pokemon) return;
+			if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
+				boosts['def'] = 0;
+				boosts['spd'] = 0;
+			}
+		},
+		shortDesc: "This Pokemon ignores the target's defensive stat increases.",
 	},
 	moody: {
 		inherit: true,
@@ -701,7 +708,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				} else {
 					this.add('-activate', pokemon, 'ability: Quark Drive');
 				}
-				this.effectState.bestStat = pokemon.getWorstStat(false, true);
+				this.effectState.bestStat = pokemon.getBestStat(false, true);
 				this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
 			},
 			onModifyAtkPriority: 5,

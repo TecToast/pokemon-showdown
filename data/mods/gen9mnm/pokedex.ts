@@ -500,6 +500,18 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Berserk", H: "Flare Boost" },
 	},
+	dratini: {
+		inherit: true,
+		abilities: { 0: "Shed Skin", 1: "Cute Charm", H: "Marvel Scale" },
+	},
+	dragonair: {
+		inherit: true,
+		abilities: { 0: "Shed Skin", 1: "Cute Charm", H: "Marvel Scale" },
+	},
+	dragonite: {
+		inherit: true,
+		abilities: { 0: "Inner Focus", 1: "Cute Charm", H: "Multiscale" },
+	},
 	chikorita: {
 		inherit: true,
 		abilities: { 0: "Overgrow", 1: "Sap Sipper", H: "Regenerator" },
@@ -542,6 +554,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	feraligatr: {
 		inherit: true,
+		baseStats: { hp: 95, atk: 105, def: 100, spa: 79, spd: 83, spe: 68 },
 		abilities: { 0: "Torrent", 1: "Strong Jaw", H: "Sheer Force" },
 	},
 	sentret: {
@@ -1461,6 +1474,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 75, atk: 70, def: 115, spa: 130, spd: 90, spe: 60 },
 		abilities: { 0: "Magnet Pull", 1: "Levitate", H: "Analytic" },
 	},
+	lickilicky: {
+		inherit: true,
+		abilities: { 0: "Lightning Rod", 1: "Oblivious", H: "Cloud Nine" },
+	},
 	tangrowth: {
 		inherit: true,
 		types: ["Grass", "Water"],
@@ -1534,7 +1551,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	heatran: {
 		inherit: true,
-		abilities: { 0: "Flash Fire", 1: "Earth Eater", H: "Flame Body" },
+		abilities: { 0: "Flash Fire", H: "Flame Body" },
 	},
 	giratina: {
 		inherit: true,
@@ -1645,6 +1662,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Forewarn", 1: "Comatose", H: "Telepathy" },
 	},
+	unfezant: {
+		inherit: true,
+		types: ["Fairy", "Flying"],
+		baseStats: { hp: 95, atk: 115, def: 80, spa: 65, spd: 55, spe: 93 },
+	},
 	blitzle: {
 		inherit: true,
 		baseStats: { hp: 45, atk: 60, def: 32, spa: 60, spd: 32, spe: 76 },
@@ -1736,21 +1758,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		baseStats: { hp: 105, atk: 50, def: 115, spa: 140, spd: 115, spe: 55 },
 		abilities: { 0: "Filter" },
-		requiredAbility: undefined,
-		battleOnly: undefined,
 	},
 	darmanitangalar: {
 		inherit: true,
-		baseStats: { hp: 105, atk: 140, def: 55, spa: 30, spd: 55, spe: 95 },
-		abilities: { 0: "Hustle" },
-	},
-	darmanitangalarzen: {
-		inherit: true,
 		baseStats: { hp: 105, atk: 120, def: 55, spa: 110, spd: 55, spe: 135 },
 		abilities: { 0: "Hustle" },
-		baseSpecies: "Darmanitan-Galar",
-		requiredAbility: undefined,
-		battleOnly: undefined,
 	},
 	maractus: {
 		inherit: true,
@@ -1971,11 +1983,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 125, atk: 120, def: 100, spa: 170, spd: 110, spe: 95 },
 	},
 	keldeo: {
-		inherit: true,
-		baseStats: { hp: 72, atk: 91, def: 90, spa: 129, spd: 90, spe: 108 },
-		abilities: { 0: "Justified", H: "Sharpness" },
-	},
-	keldeoresolute: {
 		inherit: true,
 		baseStats: { hp: 72, atk: 91, def: 90, spa: 129, spd: 90, spe: 108 },
 		abilities: { 0: "Justified", H: "Sharpness" },
@@ -2277,7 +2284,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	zygarde10: {
 		inherit: true,
-		baseStats: { hp: 54, atk: 123, def: 66, spa: 77, spd: 52, spe: 120 },
+		baseStats: { hp: 54, atk: 113, def: 66, spa: 87, spd: 52, spe: 120 },
 	},
 	zygardecomplete: {
 		inherit: true,
@@ -2474,7 +2481,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	drampa: {
 		inherit: true,
-		baseStats: { hp: 118, atk: 80, def: 85, spa: 135, spd: 91, spe: 36 },
+		baseStats: { hp: 108, atk: 80, def: 85, spa: 135, spd: 91, spe: 46 },
 	},
 	tapukoko: {
 		inherit: true,
@@ -2570,12 +2577,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	thwackey: {
 		inherit: true,
-		types: ["Grass", "Normal"],
+		types: ["Grass"],
 		abilities: { 0: "Overgrow", 1: "Soundproof", H: "Grassy Surge" },
 	},
 	rillaboom: {
 		inherit: true,
-		types: ["Grass", "Normal"],
+		types: ["Grass"],
 		abilities: { 0: "Overgrow", 1: "Punk Rock", H: "Grassy Surge" },
 	},
 	scorbunny: {
@@ -2919,6 +2926,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	wugtrio: {
 		inherit: true,
+		types: ["Water", "Rock"],
 		abilities: { 0: "Skill Link", 1: "Rattled", H: "Sand Veil" },
 	},
 	bombirdier: {
@@ -3131,9 +3139,5 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	archaludon: {
 		inherit: true,
 		weightkg: 600,
-	},
-	unfezant: {
-		inherit: true,
-		types: ["Fairy", "Flying"],
 	},
 };

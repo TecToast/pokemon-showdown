@@ -53,7 +53,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 45,
 		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1 },
-		shortDesc: "Hits 2 times. Each hit has 20% chance to poison.",
+		critRatio: 2,
+		shortDesc: "Hits 2 times. Each hit has 20% chance to poison. High critical hit ratio.",
 	},
 	uturn: {
 		inherit: true,
@@ -133,6 +134,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 50,
 		pp: 10,
+		flags: { contact: 1, mirror: 1, metronome: 1 },
 		shortDesc: "Bypasses protection without breaking it; power doubles if protection is bypassed.",
 	},
 	honeclaws: {
@@ -323,7 +325,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	electrodrift: {
 		inherit: true,
 		recoil: [1, 4],
-		basePower: 110,
 		shortDesc: "Deals 1.3333x damage with supereffective hits. Has 25% recoil.",
 	},
 	electroshot: {
@@ -548,7 +549,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	collisioncourse: {
 		inherit: true,
 		recoil: [1, 4],
-		basePower: 110,
 		shortDesc: "Deals 1.3333x damage with supereffective hits. Has 25% recoil.",
 	},
 	combattorque: {
@@ -998,7 +998,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					success = !!this.boost({ evasion: -1 }, pokemon, source, move);
 			});
 			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard',
-				'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'stealthcoal'];
 			for (const targetCondition of removeTarget) {
 				for (const side of this.sides) {
 					if (side.removeSideCondition(targetCondition)) {
@@ -1084,9 +1084,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	moongeistbeam: {
 		inherit: true,
+		flags: { protect: 1, mirror: 1, cantusetwice: 1 },
 		basePower: 120,
 		shortDesc: "Cannot be selected the turn after it's used. Ignores the Abilities of other Pokemon.",
-		flags: { protect: 1, mirror: 1, cantusetwice: 1 },
 	},
 	bulletseed: {
 		inherit: true,
@@ -2225,8 +2225,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 		},
-		basePower: 120,
 		self: undefined,
+		basePower: 120,
 		shortDesc: "If this move KOs another Pokemon, user loses an equal amount of HP.",
 	},
 	rollout: {
@@ -2312,9 +2312,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sunsteelstrike: {
 		inherit: true,
+		flags: { contact: 1, protect: 1, mirror: 1, cantusetwice: 1 },
 		basePower: 120,
 		shortDesc: "Cannot be selected the turn after it's used. Ignores the Abilities of other Pokemon.",
-		flags: { contact: 1, protect: 1, mirror: 1, cantusetwice: 1 },
 	},
 	flashcannon: {
 		inherit: true,
@@ -2545,6 +2545,47 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 10,
 		shortDesc: "For 5 turns, heavy rain powers Water moves.",
 	},
+	ember: {
+		inherit: true,
+		basePower: 20,
+		pp: 20,
+		flags: { protect: 1, mirror: 1, metronome: 1, heat: 1 },
+		secondary: {
+			chance: 100,
+			status: 'brn',
+		},
+		shortDesc: "100% chance to burn the target.",
+	},
+	powdersnow: {
+		inherit: true,
+		basePower: 20,
+		pp: 20,
+		flags: { protect: 1, mirror: 1, metronome: 1, cold: 1, powder: 1 },
+		secondary: {
+			chance: 100,
+			status: 'frz',
+		},
+		shortDesc: "100% chance to frostbite the target.",
+	},
+	incinerate: {
+		inherit: true,
+		flags: { protect: 1, mirror: 1, metronome: 1, heat: 1 },
+		onHit(target, source, move) {
+			const otherHazards = ['spikes', 'toxicspikes', 'stickyweb', 'gmaxsteelsurge', 'stealthcoal'];
+			const side = target.side;
+			const hadStealthRock = side.removeSideCondition('stealthrock');
+			for (const hazard of otherHazards) {
+				if (side.removeSideCondition(hazard)) {
+					this.add('-sideend', side, this.dex.conditions.get(hazard).name, '[from] move: Incinerate', `[of] ${source}`);
+				}
+			}
+			if (hadStealthRock) {
+				this.add('-sideend', side, 'Stealth Rock', '[from] move: Incinerate', `[of] ${source}`);
+				side.addSideCondition('stealthcoal');
+			}
+		},
+		shortDesc: "Removes target's side hazards, if Stealth Rock is removed, sets Stealth Coal.",
+	},
 	relicsong: {
 		inherit: true,
 		onAfterMoveSecondarySelf(pokemon, target, move) {
@@ -2689,7 +2730,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onTry(source) {
 			if (source.status === 'slp' || source.hasAbility('comatose') || source.hasAbility('fullmetalbody') || source.hasItem('brightpowder')) return false;
-
 			if (source.hp === source.maxhp) {
 				this.add('-fail', source, 'heal');
 				return null;
