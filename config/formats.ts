@@ -82,6 +82,17 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Shell Smash', 'Revival Blessing', 'Kinesis'],
 	},
 	{
+		name: "[Gen 9] HTCYD",
+		mod: "gen9htcyd",
+		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1', '+HTCYD'],
+	},
+	{
+		name: "[Gen 9] HTCYD Doubles",
+		gameType: 'doubles',
+		mod: "gen9htcyd",
+		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1', '+HTCYD'],
+	},
+	{
 		section: "S/V Singles",
 	},
 	{

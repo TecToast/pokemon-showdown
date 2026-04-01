@@ -35,7 +35,7 @@ type BoostID = StatIDExceptHP | 'accuracy' | 'evasion';
 type BoostsTable = { [boost in BoostID]: number };
 type SparseBoostsTable = Partial<BoostsTable>;
 // eslint-disable-next-line @stylistic/max-len
-type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom' | 'Gigantamax' | 'Batzi' | 'DML' | 'MNM';
+type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom' | 'Gigantamax' | 'Batzi' | 'DML' | 'MNM' | 'HTCYD';
 
 type PokemonSet = import('./teams').PokemonSet;
 
