@@ -2983,7 +2983,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		section: "Temporary Tour Metas",
 	},
-	{
+	/*{
 		name: "[Gen 9] Mix and Mega LC",
 		desc: `Mega evolve any Pok&eacute;mon with any mega stone, or transform them with Genesect Drives, Primal orbs, Origin orbs, Rusted items, Ogerpon Masks, Arceus Plates, and Silvally Memories with no limit. Mega and Primal boosts based on form changes from gen 7.`,
 		mod: 'mixandmega',
@@ -3219,7 +3219,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				this.add('-end', pokemon, originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
 			}
 		},
-	},
+	},*/
 
 	// National Dex
 	///////////////////////////////////////////////////////////////////

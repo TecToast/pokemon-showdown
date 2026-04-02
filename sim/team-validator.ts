@@ -583,7 +583,7 @@ export class TeamValidator {
 		}
 		if (set.name && set.name.length > 18) {
 			if (set.name === set.species) {
-				set.name = species.baseSpecies;
+				// set.name = species.baseSpecies;
 			} else {
 				problems.push(`Nickname "${set.name}" too long (should be 18 characters or fewer)`);
 			}
@@ -1172,7 +1172,7 @@ export class TeamValidator {
 		const diancieException = species.name === 'Diancie' && !set.shiny;
 		const has3PerfectIVs = setSources.minSourceGen() >= 6 && isLegendary && !diancieException;
 
-		if (set.hpType === 'Fighting' && ruleTable.has('obtainablemisc')) {
+		if (set.hpType === 'Fighting' && ruleTable.has('obtainablemisc') && this.format.mod !== 'gen9mnm') {
 			if (has3PerfectIVs) {
 				// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
 				problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a Gen 6+ legendary.`);
