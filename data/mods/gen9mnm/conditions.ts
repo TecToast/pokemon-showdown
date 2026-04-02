@@ -53,7 +53,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			if (pokemon.hasType('Ice') && this.field.isWeather('hail')) {
+			if (pokemon.hasType('Ice') && this.field.isWeather('glacialstorm')) {
 				return this.modify(def, 1.5);
 			}
 		},
@@ -157,7 +157,15 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onSwitchIn(pokemon) {
 			if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('solidfooting') || (this.format.id.includes('mnm') && (pokemon.hasAbility('shielddust')))) return;
 			const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('flamethrower')), -6, 6);
-			this.damage(pokemon.maxhp * (2 ** typeMod) / 8);
+			let factor;
+			if (typeMod <= 0) {
+				factor = (2 ** typeMod) / 8;
+			} else if (typeMod === 1) {
+				factor = 1 / 6;
+			} else {
+				factor = 1 / 4;
+			}
+			this.damage(pokemon.maxhp * factor);
 		},
 	},
 };

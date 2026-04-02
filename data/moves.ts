@@ -3734,7 +3734,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
-				if (type === 'sandstorm' || type === 'hail') return false;
+				if (type === 'sandstorm' || type === 'hail' || type == 'glacialstorm') return false;
 			},
 			onInvulnerability(target, source, move) {
 				if (['earthquake', 'magnitude'].includes(move.id)) {
@@ -3909,7 +3909,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
-				if (type === 'sandstorm' || type === 'hail') return false;
+				if (type === 'sandstorm' || type === 'hail' || type === 'glacialstorm') return false;
 			},
 			onInvulnerability(target, source, move) {
 				if (['surf', 'whirlpool'].includes(move.id)) {
@@ -22220,9 +22220,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1 },
 		onModifyType(move, pokemon) {
 			const types = pokemon.getTypes();
+			console.log(types)
 			let type = types[1];
 			if (type === 'Bird') type = '???';
-			if (type === '???' && types[0]) type = types[0];
+			if ((!type || type === '???') && types[0]) type = types[0];
 			move.type = type;
 		},
 		onHit(pokemon) {

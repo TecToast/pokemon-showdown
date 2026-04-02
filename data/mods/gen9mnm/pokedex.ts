@@ -1758,11 +1758,15 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		baseStats: { hp: 105, atk: 50, def: 115, spa: 140, spd: 115, spe: 55 },
 		abilities: { 0: "Filter" },
+		battleOnly: undefined,
+		requiredAbility: undefined,
 	},
-	darmanitangalar: {
+	darmanitangalarzen: {
 		inherit: true,
 		baseStats: { hp: 105, atk: 120, def: 55, spa: 110, spd: 55, spe: 135 },
 		abilities: { 0: "Hustle" },
+		battleOnly: undefined,
+		requiredAbility: undefined,
 	},
 	maractus: {
 		inherit: true,
