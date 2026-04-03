@@ -997,7 +997,7 @@ export class TeamValidator {
 			if (!legal && species.gen <= 2 && dex.gen >= 7 && !this.validateSource(set, '7V', setSources, species)) {
 				legal = true;
 			}
-			if (!legal) {
+			if (!legal && this.format.mod !== 'gen9mnm') {
 				if (!pokemonGoProblems || (pokemonGoProblems?.length)) {
 					if (eventData.length === 1) {
 						problems.push(`${species.name} is only obtainable from an event - it needs to match its event:`);
@@ -2204,7 +2204,7 @@ export class TeamValidator {
 			}
 		}
 		const ruleTable = this.ruleTable;
-		if (ruleTable.has('obtainablemoves')) {
+		if (ruleTable.has('obtainablemoves') && this.format.mod !== 'gen9mnm') {
 			const ssMaxSourceGen = setSources.maxSourceGen();
 			const tradebackEligible = dex.gen === 2 && (species.gen === 1 || eventSpecies.gen === 1);
 			if (ssMaxSourceGen && eventData.generation > ssMaxSourceGen && !tradebackEligible) {
