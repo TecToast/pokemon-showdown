@@ -71,6 +71,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1', '+HTCYD'],
 	},
 	{
+		name: "[Gen 9] Champions + NatDex",
+		mod: 'champions',
+		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1'],
+	},
+	{
 		section: "S/V Singles",
 	},
 	{
@@ -1004,7 +1009,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				this.add('-end', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
 			}
 		},
-	},*/
+	}, */
 	{
 		name: "[Gen 9] Pokebilities AAA",
 		desc: `Pok&eacute;mon have all of their released abilities simultaneously, as well as one ability they cannot normally use.`,
@@ -3088,7 +3093,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		section: "Temporary Tour Metas",
 	},
-	/*{
+	/* {
 		name: "[Gen 9] Mix and Mega LC",
 		desc: `Mega evolve any Pok&eacute;mon with any mega stone, or transform them with Genesect Drives, Primal orbs, Origin orbs, Rusted items, Ogerpon Masks, Arceus Plates, and Silvally Memories with no limit. Mega and Primal boosts based on form changes from gen 7.`,
 		mod: 'mixandmega',
@@ -3324,7 +3329,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				this.add('-end', pokemon, originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
 			}
 		},
-	},*/
+	}, */
 
 	// National Dex
 	///////////////////////////////////////////////////////////////////
