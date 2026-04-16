@@ -2562,7 +2562,16 @@ export class TeamValidator {
 			return ` can't learn any moves at all.`;
 		}
 
-		for (const { species, learnset } of fullLearnset) {
+		for (const { species, learnset: realLearnset } of fullLearnset) {
+			const learnset = { ...realLearnset }
+			if (this.format.id.includes('championsnatdex')) {
+				const baseLearnsets = Dex.species.getFullLearnset(originalSpecies.id);
+				for (const bls of baseLearnsets) {
+					for (const baseMove in bls.learnset) {
+						if (!learnset[baseMove]) learnset[baseMove] = bls.learnset[baseMove];
+					}
+				}
+			}
 			if (dex.gen <= 2 && species.gen === 1) tradebackEligible = true;
 			const checkingPrevo = species.baseSpecies !== originalSpecies.baseSpecies;
 			if (checkingPrevo && !moveSources.size()) {
