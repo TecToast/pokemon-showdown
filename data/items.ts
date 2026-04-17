@@ -1115,7 +1115,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Flying",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Flying' && target.getMoveHitData(move).typeMod > 0) {
+			if ((move.type === 'Flying' || move.secondType === 'Flying') && target.getMoveHitData(move).typeMod > 0) {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
@@ -1639,7 +1639,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onPlate: 'Ground',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Ground') {
+			if (move && (move.type === 'Ground' || move.secondType === 'Ground')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -2209,7 +2209,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Flying' && source.useItem()) {
+			if ((move.type === 'Flying' || move.secondType === 'Flying') && source.useItem()) {
 				source.addVolatile('gem');
 			}
 		},
@@ -2694,7 +2694,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Ground' && source.useItem()) {
+			if ((move.type === 'Ground' || move.secondType === 'Ground') && source.useItem()) {
 				source.addVolatile('gem');
 			}
 		},
@@ -5606,7 +5606,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Flying') {
+			if (move && (move.type === 'Flying' || move.secondType === 'Flying')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -5691,7 +5691,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Ground",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Ground' && target.getMoveHitData(move).typeMod > 0) {
+			if ((move.type === 'Ground' || move.secondType === 'Ground') && target.getMoveHitData(move).typeMod > 0) {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
@@ -5786,7 +5786,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onPlate: 'Flying',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Flying') {
+			if (move.type === 'Flying' || move.secondType === 'Flying') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -5857,7 +5857,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Ground') {
+			if (move.type === 'Ground' || move.secondType === 'Ground') {
 				return this.chainModify([4915, 4096]);
 			}
 		},

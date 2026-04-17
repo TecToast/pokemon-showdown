@@ -35,6 +35,7 @@ export interface EffectState {
 	id: string;
 	effectOrder: number;
 	duration?: number;
+
 	[k: string]: any;
 }
 
@@ -2271,29 +2272,42 @@ export class Pokemon {
 	/** false = immune, true = not immune */
 	runImmunity(source: ActiveMove | string, message?: string | boolean) {
 		if (!source) return true;
-		const type: string = typeof source !== 'string' ? source.type : source;
-		if (typeof source !== 'string') {
-			if (source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[type])) {
-				return true;
+		const mainType: string = typeof source !== 'string' ? source.type : source;
+		const secondaryType = this.battle.format.mod === 'gen9mnm' && typeof source !== 'string' ? source.secondType : undefined;
+		const allTypes: string[] = [mainType, secondaryType].filter(t => !!t) as string[];
+		let returnValue = false;
+		for (const type of allTypes) {
+			if (typeof source !== 'string') {
+				if (source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[type])) {
+					returnValue = true;
+					continue;
+				}
 			}
-		}
-		if (!type || type === '???') return true;
-		if (!this.battle.dex.types.isName(type)) {
-			throw new Error("Use runStatusImmunity for " + type);
-		}
+			if (!type || type === '???') {
+				returnValue = true;
+				continue;
+			}
+			if (!this.battle.dex.types.isName(type)) {
+				throw new Error("Use runStatusImmunity for " + type);
+			}
 
-		const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
-		const notImmune = type === 'Ground' ?
-			this.isGrounded(negateImmunity) :
-			negateImmunity || this.battle.dex.getImmunity(type, this);
-		if (notImmune) return true;
-		if (!message) return false;
-		if (notImmune === null) {
-			this.battle.add('-immune', this, '[from] ability: Levitate');
-		} else {
-			this.battle.add('-immune', this);
+			const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
+			const notImmune = type === 'Ground' ?
+				this.isGrounded(negateImmunity) :
+				negateImmunity || this.battle.dex.getImmunity(type, this);
+			if (notImmune) {
+				returnValue = true;
+				continue;
+			}
+			if (!message) return false;
+			if (notImmune === null) {
+				this.battle.add('-immune', this, '[from] ability: Levitate');
+			} else {
+				this.battle.add('-immune', this);
+			}
+			return false;
 		}
-		return false;
+		return returnValue;
 	}
 
 	runStatusImmunity(type: string, message?: string) {
