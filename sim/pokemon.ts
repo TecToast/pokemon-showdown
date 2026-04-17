@@ -2178,7 +2178,7 @@ export class Pokemon {
 			return [this.terastallized];
 		}
 		const types = this.battle.runEvent('Type', this, null, null, this.types);
-		if (!types.length) types.push(this.battle.gen >= 5 ? 'Normal' : '???');
+		if (!types.length && this.battle.format.mod !== 'gen9mnm') types.push(this.battle.gen >= 5 ? 'Normal' : '???');
 		if (!excludeAdded && this.addedType) return types.concat(this.addedType);
 		return types;
 	}
