@@ -21329,7 +21329,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
-		secondary: null,
 		target: "normal",
 		type: "Fairy",
 		contestType: "Clever",
@@ -21389,7 +21388,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.heal(hpToHeal, pokemon);
 			this.boost({ atk: 1, def: -1, spd: -1 });
 		},
-		secondary: null,
 		target: "self",
 		type: "Bug",
 		zMove: { effect: 'clearnegativeboost' },
@@ -21416,7 +21414,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(pokemon) {
 			this.add('-anim', pokemon, 'Take Down', pokemon);
 		},
-		secondary: null,
 		target: "normal",
 		type: "Normal",
 		contestType: "Beautiful",
@@ -21435,7 +21432,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.add('-anim', pokemon, 'Bite', pokemon);
 		},
 		drain: [1, 2],
-		secondary: null,
 		target: "normal",
 		type: "Water",
 		contestType: "Clever",
