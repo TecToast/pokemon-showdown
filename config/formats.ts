@@ -73,7 +73,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Champions + NatDex",
 		mod: 'champions',
-		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1', "!Min Team Size", "+Future"],
+		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1', "+Future"],
 	},
 	{
 		section: "S/V Singles",
