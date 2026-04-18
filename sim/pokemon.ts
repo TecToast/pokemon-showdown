@@ -2273,6 +2273,7 @@ export class Pokemon {
 	runImmunity(source: ActiveMove | string, message?: string | boolean) {
 		if (!source) return true;
 		const mainType: string = typeof source !== 'string' ? source.type : source;
+		if (!mainType || mainType === '???') return true;
 		const secondaryType = this.battle.format.mod === 'gen9mnm' && typeof source !== 'string' ? source.secondType : undefined;
 		const allTypes: string[] = [mainType, secondaryType].filter(t => !!t) as string[];
 		let returnValue = false;
