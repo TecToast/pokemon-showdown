@@ -2529,9 +2529,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	muddywater: {
 		inherit: true,
 		secondType: 'Ground',
-		onEffectiveness(typeMod, target, type, move) {
-			return typeMod + this.dex.getEffectiveness('Ground', type);
-		},
 		accuracy: 95,
 		secondary: undefined,
 		shortDesc: "Combines Ground in its type effectiveness.",
@@ -2539,6 +2536,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	flyingpress: {
 		inherit: true,
 		secondType: 'Flying',
+		onEffectiveness: undefined,
 	},
 	octazooka: {
 		inherit: true,

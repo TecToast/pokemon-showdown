@@ -1241,6 +1241,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				move.type = 'Fire';
 				this.debug(move.name + "'s type changed to Fire");
 			}
+			if (move.secondType && ['Water', 'Ground', 'Rock'].includes(move.secondType)) {
+				move.secondType = 'Fire';
+				this.debug(move.name + "'s second type changed to Fire");
+			}
+		},
+		flags: {
+			breakable: 1,
 		},
 		onUpdate: undefined,
 		onImmunity: undefined,

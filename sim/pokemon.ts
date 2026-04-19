@@ -2249,9 +2249,11 @@ export class Pokemon {
 			totalTypeMod = 1;
 		} else {
 			for (const type of this.getTypes()) {
-				let typeMod = this.battle.dex.getEffectiveness(move, type);
-				typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
-				totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
+				for (const moveType of [move.type ?? move, move.secondType].filter(itm => !!itm) as string[]) {
+					let typeMod = this.battle.dex.getEffectiveness(moveType, type);
+					typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
+					totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
+				}
 			}
 		}
 		if (this.species.name === 'Terapagos-Terastal' && this.hasAbility('Tera Shell') &&
