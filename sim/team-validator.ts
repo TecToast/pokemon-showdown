@@ -2513,6 +2513,7 @@ export class TeamValidator {
 	): string | null {
 		const dex = this.dex;
 		if (!setSources.size()) throw new Error(`Bad sources passed to checkCanLearn`);
+		console.log(setSources);
 
 		move = dex.moves.get(move);
 		const moveid = move.id;
@@ -2563,7 +2564,7 @@ export class TeamValidator {
 		}
 
 		for (const { species, learnset: realLearnset } of fullLearnset) {
-			const learnset = { ...realLearnset }
+			const learnset = { ...realLearnset };
 			if (this.format.id.includes('championsnatdex')) {
 				const baseLearnsets = Dex.species.getFullLearnset(originalSpecies.id);
 				for (const bls of baseLearnsets) {
@@ -2619,7 +2620,7 @@ export class TeamValidator {
 
 				const learnedGen = parseInt(learned.charAt(0));
 				if (formeCantInherit && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
-				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(`${learnedGen}${toID(species.baseSpecies)}`) &&
+				if (!this.format.id.includes('championsnatdex') && setSources.learnsetDomain && !setSources.learnsetDomain.includes(`${learnedGen}${toID(species.baseSpecies)}`) &&
 					(learned.charAt(1) !== 'E' || learnedGen < 8)
 				) {
 					if (!cantLearnReason) {
