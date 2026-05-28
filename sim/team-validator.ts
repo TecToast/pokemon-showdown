@@ -2217,7 +2217,7 @@ export class TeamValidator {
 			}
 		}
 		const ruleTable = this.ruleTable;
-		if (ruleTable.has('obtainablemoves') && this.format.mod !== 'gen9mnm') {
+		if (ruleTable.has('obtainablemoves') && this.format.mod !== 'gen9mnm' && this.format.id !== 'gen9championsnatdex') {
 			const ssMaxSourceGen = setSources.maxSourceGen();
 			const tradebackEligible = dex.gen === 2 && (species.gen === 1 || eventSpecies.gen === 1);
 			if (ssMaxSourceGen && eventData.generation > ssMaxSourceGen && !tradebackEligible) {
@@ -2513,7 +2513,6 @@ export class TeamValidator {
 	): string | null {
 		const dex = this.dex;
 		if (!setSources.size()) throw new Error(`Bad sources passed to checkCanLearn`);
-		console.log(setSources);
 
 		move = dex.moves.get(move);
 		const moveid = move.id;
@@ -2554,7 +2553,8 @@ export class TeamValidator {
 		const canSketchPostGen7Moves = ruleTable.has('sketchpostgen7moves') || this.dex.currentMod === 'gen8bdsp';
 
 		let tradebackEligible = false;
-		const fullLearnset = dex.species.getFullLearnset(originalSpecies.id);
+		const isChampionsNatdex = this.format.id === 'gen9championsnatdex';
+		const fullLearnset = dex.species.getFullLearnset(originalSpecies.id, isChampionsNatdex);
 		if (!fullLearnset.length) {
 			// It's normal for a nonstandard species not to have learnset data
 
@@ -2563,16 +2563,7 @@ export class TeamValidator {
 			return ` can't learn any moves at all.`;
 		}
 
-		for (const { species, learnset: realLearnset } of fullLearnset) {
-			const learnset = { ...realLearnset };
-			if (this.format.id.includes('championsnatdex')) {
-				const baseLearnsets = Dex.species.getFullLearnset(originalSpecies.id);
-				for (const bls of baseLearnsets) {
-					for (const baseMove in bls.learnset) {
-						if (!learnset[baseMove]) learnset[baseMove] = bls.learnset[baseMove];
-					}
-				}
-			}
+		for (const { species, learnset } of fullLearnset) {
 			if (dex.gen <= 2 && species.gen === 1) tradebackEligible = true;
 			const checkingPrevo = species.baseSpecies !== originalSpecies.baseSpecies;
 			if (checkingPrevo && !moveSources.size()) {
@@ -2581,7 +2572,7 @@ export class TeamValidator {
 				}
 			}
 
-			const formeCantInherit = (this.format.mod === 'gen9mnm' && species.id === 'darmanitangalar') ? false : dex.species.eggMovesOnly(species, baseSpecies);
+			const formeCantInherit = (this.format.mod === 'gen9mnm' && species.id === 'darmanitangalar') ? false : dex.species.eggMovesOnly(species, baseSpecies, isChampionsNatdex);
 			if (formeCantInherit && dex.gen < 9) break;
 
 			let sources = learnset[moveid] || [];
@@ -2620,7 +2611,7 @@ export class TeamValidator {
 
 				const learnedGen = parseInt(learned.charAt(0));
 				if (formeCantInherit && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
-				if (!this.format.id.includes('championsnatdex') && setSources.learnsetDomain && !setSources.learnsetDomain.includes(`${learnedGen}${toID(species.baseSpecies)}`) &&
+				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(`${learnedGen}${toID(species.baseSpecies)}`) &&
 					(learned.charAt(1) !== 'E' || learnedGen < 8)
 				) {
 					if (!cantLearnReason) {
@@ -2930,7 +2921,12 @@ export class TeamValidator {
 		const backupSources = setSources.sources;
 		const backupSourcesBefore = setSources.sourcesBefore;
 		setSources.intersectWith(moveSources);
-		if (this.format.mod !== 'gen9mnm' && !setSources.size()) {
+		if (!setSources.size() && (this.format.mod === 'gen9mnm')) {
+			// pretend this pokemon didn't have this move:
+			// prevents a crash if OMs override `checkCanLearn` to keep validating after an error
+			setSources.sources = backupSources;
+			setSources.sourcesBefore = backupSourcesBefore;
+		} else if (!setSources.size()) {
 			// pretend this pokemon didn't have this move:
 			// prevents a crash if OMs override `checkCanLearn` to keep validating after an error
 			setSources.sources = backupSources;

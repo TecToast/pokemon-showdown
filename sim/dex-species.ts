@@ -1,6 +1,7 @@
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
 import { isDeepStrictEqual } from 'node:util';
+import Dex from "./dex";
 
 interface SpeciesAbility {
 	0: string;
@@ -413,6 +414,7 @@ export class DexSpecies {
 	readonly dex: ModdedDex;
 	readonly speciesCache = new Map<ID, Species>();
 	readonly learnsetCache = new Map<ID, Learnset>();
+	readonly championsNatdexLearnsetCache = new Map<ID, Learnset>();
 	allCache: readonly Species[] | null = null;
 
 	constructor(dex: ModdedDex) {
@@ -694,7 +696,7 @@ export class DexSpecies {
 		return movePool;
 	}
 
-	getFullLearnset(id: ID): (Learnset & { learnset: NonNullable<Learnset['learnset']> })[] {
+	getFullLearnset(id: ID, isChampionsNatdex?: boolean): (Learnset & { learnset: NonNullable<Learnset['learnset']> })[] {
 		const originalSpecies = this.get(id);
 		let species: Species | null = originalSpecies;
 		const out: (Learnset & { learnset: NonNullable<Learnset['learnset']> })[] = [];
@@ -702,10 +704,10 @@ export class DexSpecies {
 
 		while (species?.name && !alreadyChecked[species.id]) {
 			alreadyChecked[species.id] = true;
-			const learnset = this.getLearnsetData(species.id);
+			const learnset = this.getLearnsetData(species.id, isChampionsNatdex);
 			if (learnset.learnset) {
 				out.push(learnset as any);
-				species = this.learnsetParent(species, true);
+				species = this.learnsetParent(species, true, isChampionsNatdex);
 				continue;
 			}
 
@@ -724,7 +726,7 @@ export class DexSpecies {
 				// allow pokemon without learnsets.
 				return out;
 			}
-			if (species.prevo && this.getLearnsetData(toID(species.prevo)).learnset) {
+			if (species.prevo && this.getLearnsetData(toID(species.prevo), isChampionsNatdex).learnset) {
 				species = this.get(toID(species.prevo));
 				continue;
 			}
@@ -736,7 +738,7 @@ export class DexSpecies {
 		return out;
 	}
 
-	learnsetParent(species: Species, checkingMoves = false) {
+	learnsetParent(species: Species, checkingMoves = false, isChampionsNatdex?: boolean) {
 		// Own Tempo Rockruff and Battle Bond Greninja are special event formes
 		// that are visually indistinguishable from their base forme but have
 		// different learnsets. To prevent a leak, we make them show up as their
@@ -747,7 +749,7 @@ export class DexSpecies {
 		} else if (species.prevo) {
 			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
 			// Shed Skin Pupitar can definitely evolve into Unnerve Tyranitar
-			if (this.dex.currentMod === 'champions') return null;
+			if (this.dex.currentMod === 'champions' && !isChampionsNatdex) return null;
 			species = this.get(species.prevo);
 			if (species.gen > Math.max(2, this.dex.gen)) return null;
 			return species;
@@ -773,15 +775,38 @@ export class DexSpecies {
 	 * In practice, if you're trying to figure out what moves a pokemon learns,
 	 * you probably want to `getFullLearnset` or `getMovePool` instead.
 	 */
-	getLearnsetData(id: ID): Learnset {
-		let learnsetData = this.learnsetCache.get(id);
+	getLearnsetData(id: ID, isChampionsNatdex?: boolean): Learnset {
+		const cacheToUse = isChampionsNatdex ? this.championsNatdexLearnsetCache : this.learnsetCache;
+		let learnsetData = cacheToUse.get(id);
 		if (learnsetData) return learnsetData;
-		if (!this.dex.data.Learnsets.hasOwnProperty(id)) {
-			return new Learnset({ exists: false }, this.get(id));
+		const ourLearnsets = this.dex.data.Learnsets;
+		const globalLearnsets = Dex.data.Learnsets;
+		if (!ourLearnsets.hasOwnProperty(id)) {
+			if (!isChampionsNatdex || !globalLearnsets.hasOwnProperty(id)) {
+				return new Learnset({ exists: false }, this.get(id));
+			} else {
+				return new Learnset(globalLearnsets[id], this.get(id));
+			}
 		}
-		learnsetData = new Learnset(this.dex.data.Learnsets[id], this.get(id));
-		this.learnsetCache.set(id, this.dex.deepFreeze(learnsetData));
+		const learnsetToUse = isChampionsNatdex ? this.fuseLearnsets(ourLearnsets[id], globalLearnsets[id]) : ourLearnsets[id];
+		learnsetData = new Learnset(learnsetToUse, this.get(id));
+		cacheToUse.set(id, this.dex.deepFreeze(learnsetData));
 		return learnsetData;
+	}
+
+	fuseLearnsets(a: LearnsetData, b: LearnsetData): LearnsetData {
+		const setA = a.learnset || {};
+		const setB = b.learnset || {};
+		const fusedLearnset: { [p: string]: MoveSource[] } = {};
+		for (const [moveid, sources] of Object.entries(setA)) {
+			fusedLearnset[moveid] = sources;
+		}
+		for (const [moveid, sources] of Object.entries(setB)) {
+			const newSources = [...(fusedLearnset[moveid] || [])];
+			newSources.push(...sources.filter(itm => !newSources.includes(itm)));
+			fusedLearnset[moveid] = newSources;
+		}
+		return { learnset: fusedLearnset };
 	}
 
 	getPokemonGoData(id: ID): PokemonGoData {
@@ -798,11 +823,11 @@ export class DexSpecies {
 		return this.allCache;
 	}
 
-	eggMovesOnly(child: Species, father: Species | null) {
+	eggMovesOnly(child: Species, father: Species | null, isChampionsNatdex?: boolean) {
 		if (child.baseSpecies === father?.baseSpecies) return false;
 		while (father) {
 			if (father.name === child.name) return false;
-			father = this.learnsetParent(father);
+			father = this.learnsetParent(father, false, isChampionsNatdex);
 		}
 		return true;
 	}
