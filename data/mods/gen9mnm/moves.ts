@@ -161,10 +161,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePowerCallback(pokemon, target) {
 			if (this.queue.willMove(target)) {
-				return 50;
+				return 60;
 			}
 			this.debug('BP doubled');
-			return 100;
+			return 120;
 		},
 		basePower: 60,
 		shortDesc: "Power doubles if the user moves after the target. Includes Switching in.",
