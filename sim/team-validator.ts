@@ -782,8 +782,10 @@ export class TeamValidator {
 		problem = this.checkAbility(set, ability, setHas);
 		if (problem) problems.push(problem);
 
-		if (!set.nature || dex.gen <= 2) {
+		if (dex.gen <= 2) {
 			set.nature = '';
+		} else if (!set.nature) {
+			set.nature = 'Serious';
 		}
 		nature = dex.natures.get(set.nature);
 		problem = this.checkNature(set, nature, setHas);
@@ -1312,7 +1314,13 @@ export class TeamValidator {
 		for (const stat in set.evs) totalEV += set.evs[stat as 'hp'];
 		if (!this.format.debug) {
 			if (set.level > 1 && evLimit !== 0 && totalEV === 0) {
-				problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
+				if (useStatPoints) {
+					if (set.nature === 'Serious') {
+						problems.push(`${name} has exactly 0 Stat Points - did you forget to invest it? (If this was intentional, change your Nature to a different neutral Nature, which won't change its stats but will tell us that it wasn't a mistake).`);
+					}
+				} else {
+					problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
+				}
 			} else if (![508, 510].includes(evLimit!) && [508, 510].includes(totalEV)) {
 				problems.push(`${name} has exactly ${totalEV} EVs, but this format does not restrict you to 510 EVs (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 			}

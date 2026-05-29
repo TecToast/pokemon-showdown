@@ -99,6 +99,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
 				if (move.type === 'Fire' && target.species.name === "Beartic") {
 					target.formeChange('Beartic-Freshwater', null, true);
+					target.setAbility('drizzle', target);
 
 					const glacierFangIndex = target.set.moves
 						.map(setMove => setMove.toLowerCase().replace(/[^a-z0-9]/g, '')).indexOf('glacierfang' as ID);
@@ -119,6 +120,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 					target.baseMoveSlots[glacierFangIndex] = sketchedMove;
 				} else if (move.type === 'Ice' && target.species.name === "Beartic-Freshwater") {
 					target.formeChange('Beartic', null, true);
+					target.setAbility('slushrush', target);
 
 					const meltingMaulIndex = target.set.moves
 						.map(setMove => setMove.toLowerCase().replace(/[^a-z0-9]/g, '')).indexOf('meltingmaul' as ID);
@@ -175,7 +177,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			if (effect?.name === 'Fiery Dance' && boost.spa &&
 				source.species.name === "Volcarona") {
 				source.formeChange('Volcarona-Radiant', null, true);
-				this.add('-activate', source, 'ability: Desolate Land');
+				this.add('-activate', source, 'ability: Mega Sol');
 			}
 		},
 		onModifyMovePriority: 1,
@@ -214,8 +216,10 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
 				if (pokemon.activeTurns && pokemon.species.name === "Fearow") {
 					pokemon.formeChange('Fearow-Ferocious', null, true);
+					this.add('-ability', pokemon, 'Wonder Guard');
 				} else if (pokemon.activeTurns && pokemon.species.name === "Fearow-Ferocious") {
 					pokemon.formeChange('Fearow', null, true);
+					this.add('-ability', pokemon, 'Sniper');
 				} else if (pokemon.hp <= pokemon.maxhp / 2 &&
 					pokemon.species.name === "Sunflora") {
 					pokemon.formeChange('Sunflora-Wilted', null, true);
