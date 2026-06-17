@@ -135,7 +135,7 @@ const MOVE_PAIRS = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PRIORITY_POKEMON = [
-	'breloom', 'brutebonnet', 'cacturne', 'honchkrow', 'mimikyu', 'ragingbolt', 'scizor',
+	'breloom', 'brutebonnet', 'cacturne', 'honchkrow', 'mimikyu', 'ragingbolt', 'scizor', 'scizormega',
 ];
 
 /** Pokemon who should never be in the lead slot */
@@ -1286,6 +1286,9 @@ export class RandomTeams {
 			(!types.has('Flying') || this.dex.getEffectiveness('Rock', species) >= 2)
 		) return 'Heavy-Duty Boots';
 		if (
+			role === 'Doubles Support' && ability === 'Prankster' && moves.has('tailwind') && this.randomChance(3, 4)
+		) return 'Covert Cloak';
+		if (
 			(role === 'Bulky Protect' && counter.get('setup')) ||
 			['irondefense', 'coil', 'acidarmor', 'wish'].some(m => moves.has(m)) ||
 			(counter.get('recovery') && !moves.has('strengthsap') && !counter.get('speedcontrol') && !offensiveRole) ||
@@ -1422,7 +1425,7 @@ export class RandomTeams {
 	): number {
 		if (this.adjustLevel) return this.adjustLevel;
 		// Temporarily modified for Mega Invasion randomized spotlight
-		if (this.gen === 9 && (species.id in this.randomMegaSets)) return this.randomMegaSets[species.id]["level"]!;
+		if (this.format.mod === 'gen9' && (species.id in this.randomMegaSets)) return this.randomMegaSets[species.id]["level"]!;
 		// doubles levelling
 		if (isDoubles && this.randomDoublesSets[species.id]["level"]) return this.randomDoublesSets[species.id]["level"]!;
 		if (!isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"]!;
@@ -1461,7 +1464,7 @@ export class RandomTeams {
 		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
 		if (species.baseSpecies === 'Magearna') return 'Magearna' + this.sample(['', '-Original']);
 		if (species.baseSpecies === 'Keldeo' && this.gen <= 7) return 'Keldeo' + this.sample(['', '-Resolute']);
-		if (species.baseSpecies === 'Pikachu' && this.gen >= 8) {
+		if (species.baseSpecies === 'Pikachu' && this.gen >= 8 && this.format.mod !== 'champions') {
 			return 'Pikachu' + this.sample(
 				['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']
 			);
