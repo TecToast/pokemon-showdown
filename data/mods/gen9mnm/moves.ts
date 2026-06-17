@@ -1898,7 +1898,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	crosspoison: {
 		inherit: true,
 		onModifyMove(move, pokemon, target) {
-			if (target && ['psn', 'tox'].includes(target.status)) return 5;
+			if (target && ['psn', 'tox'].includes(target.status)) {
+				move.critRatio = 5;
+			}
 		},
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		shortDesc: "Always crits if target is poisoned.",
