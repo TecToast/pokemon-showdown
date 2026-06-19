@@ -76,6 +76,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1', "+Future", "+move:revivalblessing", "+move:doubleshock"],
 	},
 	{
+		name: "[Gen 9] Champions + NatDex PrePatch",
+		mod: 'championsprepatch',
+		ruleset: ['Standard Draft', '+Unobtainable', '+Past', 'Min Source Gen = 1', "+Future", "+move:revivalblessing", "+move:doubleshock"],
+	},
+	{
 		section: "S/V Singles",
 	},
 	{
