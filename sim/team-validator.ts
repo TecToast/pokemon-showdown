@@ -704,7 +704,7 @@ export class TeamValidator {
 				set.hpType = type.name;
 			}
 		}
-		if ((this.gen === 9 && dex.currentMod !== 'champions' && !ruleTable.has('terastalclause')) ||
+		if ((this.gen === 9 && !dex.currentMod.startsWith('champions') && !ruleTable.has('terastalclause')) ||
 			ruleTable.has('bonustypemod')) {
 			const type = dex.types.get(set.teraType || species.requiredTeraType || species.types[0]);
 			if (!type.exists || type.isNonstandard) {
@@ -1128,7 +1128,7 @@ export class TeamValidator {
 		const dex = this.dex;
 
 		const allowAVs = !ruleTable.has('lgpenormalrules');
-		const useStatPoints = dex.currentMod === 'champions' && !this.format.id.includes('championsnatdex');
+		const useStatPoints = dex.currentMod.startsWith('champions') && !this.format.id.includes('championsnatdex');
 		const evLimit = ruleTable.evLimit;
 		const canBottleCap = dex.gen >= 7 && (set.level >= (dex.gen < 9 ? 100 : 50) || !ruleTable.has('obtainablemisc'));
 
@@ -2559,7 +2559,7 @@ export class TeamValidator {
 		const canSketchPostGen7Moves = ruleTable.has('sketchpostgen7moves') || this.dex.currentMod === 'gen8bdsp';
 
 		let tradebackEligible = false;
-		const isChampionsNatdex = this.format.id === 'gen9championsnatdex';
+		const isChampionsNatdex = this.format.id.startsWith('gen9championsnatdex');
 		const fullLearnset = dex.species.getFullLearnset(originalSpecies.id, isChampionsNatdex);
 		if (!fullLearnset.length) {
 			// It's normal for a nonstandard species not to have learnset data

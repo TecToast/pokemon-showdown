@@ -749,7 +749,7 @@ export class DexSpecies {
 		} else if (species.prevo) {
 			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
 			// Shed Skin Pupitar can definitely evolve into Unnerve Tyranitar
-			if (this.dex.currentMod === 'champions' && !isChampionsNatdex) return null;
+			if (this.dex.currentMod.startsWith('champions') && !isChampionsNatdex) return null;
 			species = this.get(species.prevo);
 			if (species.gen > Math.max(2, this.dex.gen)) return null;
 			return species;
