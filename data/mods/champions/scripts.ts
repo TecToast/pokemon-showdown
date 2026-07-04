@@ -194,6 +194,12 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		canTerastallize(pokemon) {
+			if (this.battle.format.id.includes('championsnatdex')) {
+				if (pokemon.getItem().zMove || pokemon.canMegaEvo || this.dex.gen !== 9) {
+					return null;
+				}
+				return pokemon.teraType;
+			}
 			return null;
 		},
 		canMegaEvo(pokemon: Pokemon) {
