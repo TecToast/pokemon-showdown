@@ -704,7 +704,7 @@ export class TeamValidator {
 				set.hpType = type.name;
 			}
 		}
-		if ((this.gen === 9 && !dex.currentMod.startsWith('champions') && !ruleTable.has('terastalclause')) ||
+		if ((this.gen === 9 && (!dex.currentMod.startsWith('champions') || format.id.includes('natdex')) && !ruleTable.has('terastalclause')) ||
 			ruleTable.has('bonustypemod')) {
 			const type = dex.types.get(set.teraType || species.requiredTeraType || species.types[0]);
 			if (!type.exists || type.isNonstandard) {
