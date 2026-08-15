@@ -704,7 +704,7 @@ export const commands: Chat.ChatCommands = {
 						details["Pre-Evolution"] = pokemon.prevo;
 					}
 					if (!evos.length) {
-						details[`<font color="#686868">Does Not Evolve</font>`] = "";
+						details[`<span class="gray">Does Not Evolve</span>`] = "";
 					} else {
 						details["Evolution"] = evos.join(", ");
 					}
@@ -751,8 +751,7 @@ export const commands: Chat.ChatCommands = {
 						Gen: String(move.gen) || 'CAP',
 					};
 
-					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8) ||
-						(move.isNonstandard === "Gigantamax" && dex.gen !== 8);
+					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8);
 					if (pastGensOnly) details["&#10007; Past Gens Only"] = "";
 					if (move.secondary || move.secondaries || move.hasSheerForceBoost) {
 						details["&#10003; Boosted by Sheer Force"] = "";
@@ -870,7 +869,7 @@ export const commands: Chat.ChatCommands = {
 
 			if (showDetails) {
 				buffer += `${prefix}<font size="1">${Object.entries(details).map(([detail, value]) => (
-					value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+					value === '' ? detail : `<span class="gray">${detail}:</span> ${value}`
 				)).join("&nbsp;|&ThickSpace;")}</font>\n`;
 			}
 		}

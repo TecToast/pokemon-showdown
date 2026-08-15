@@ -860,7 +860,7 @@ export class Pokemon {
 					!(move.id.startsWith('solarb') && ['sunnyday', 'desolateland'].includes(this.effectiveWeather(move))) &&
 					!(move.id === 'electroshot' && ['raindance', 'primordialsea'].includes(this.effectiveWeather(move))) &&
 					!(this.hasItem('powerherb') && move.id !== 'skydrop');
-				if (!isCharging && !(move.id === 'pursuit' && (target.beingCalledBack || target.switchFlag))) {
+				if (!isCharging) {
 					target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
 				}
 			}
@@ -1725,6 +1725,7 @@ export class Pokemon {
 		ignoreImmunities = false
 	) {
 		if (!this.hp) return false;
+		if (!this.isActive && status) return false;
 		status = this.battle.dex.conditions.get(status);
 		if (this.battle.format.mod === 'gen9batzi' && status.id === 'frz') return false;
 		if (this.battle.event) {
@@ -2321,7 +2322,13 @@ export class Pokemon {
 			}
 			if (!message) return false;
 			if (notImmune === null) {
-				this.battle.add('-immune', this, '[from] ability: Levitate');
+				if (this.hasAbility('levitate')) {
+					this.battle.add('-immune', this, '[from] ability: Levitate');
+				} else if (this.hasAbility('eelevate')) {
+					this.battle.add('-immune', this, '[from] ability: Eelevate');
+				} else {
+					this.battle.add('-immune', this);
+				}
 			} else {
 				this.battle.add('-immune', this);
 			}

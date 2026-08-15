@@ -195,15 +195,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			chance: 30,
 			onHit(target, source) {
 				const status = this.sample(['psn', 'par', 'slp']);
-				// This seems to only happen with Dire Claw
-				if (target.status) {
-					if (target.status === status) {
-						this.add('-fail', target, status);
-					} else {
-						this.add('-fail', target);
-					}
-					return;
-				}
 				target.trySetStatus(status, source);
 			},
 		},
@@ -228,7 +219,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	doubleshock: {
 		inherit: true,
-		isNonstandard: "Custom",
+		isNonstandard: "Past",
 	},
 	dragonascent: {
 		inherit: true,
@@ -809,7 +800,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	revivalblessing: {
 		inherit: true,
-		isNonstandard: "Custom",
+		isNonstandard: "Past",
 	},
 	roaroftime: {
 		inherit: true,
