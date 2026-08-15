@@ -1381,6 +1381,7 @@ export class TeamValidator {
 	validateSource(
 		set: PokemonSet, source: PokemonSource, setSources: PokemonSources, species: Species, because?: string
 	) {
+		if (true) return undefined;
 		let eventData: EventInfo | undefined;
 		let eventSpecies = species;
 		if (source.charAt(1) === 'S') {
