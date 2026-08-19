@@ -13,7 +13,7 @@ FROM --platform=${PLATFORM} node:${NODE_VERSION} AS final
 USER 1000:1000
 WORKDIR /app
 COPY --chown=1000:1000 --from=base /app/dist ./dist
-COPY --chown=1000:1000 --from=base /app/config ./dist
+COPY --chown=1000:1000 --from=base /app/config ./config
 COPY --chown=1000:1000 --from=base /app/node_modules ./node_modules
 COPY --chown=1000:1000 --from=base /app/pokemon-showdown ./pokemon-showdown
 ENTRYPOINT ["node", "pokemon-showdown"]
